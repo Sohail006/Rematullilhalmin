@@ -1,0 +1,95 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Role {
+  id          String           @id @default(cuid())
+  name        String           @unique
+  description String?
+  isSystem    Boolean          @default(false)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  users       User[]
+  permissions RolePermission[]
+}
+
+model Permission {
+  id          String           @id @default(cuid())
+  key         String           @unique
+  label       String
+  description String?
+  roles       RolePermission[]
+}
+
+model RolePermission {
+  roleId       String
+  permissionId String
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+}
+
+model User {
+  id           String               @id @default(cuid())
+  username     String               @unique
+  passwordHash String
+  fullName     String
+  isActive     Boolean              @default(true)
+  roleId       String
+  role         Role                 @relation(fields: [roleId], references: [id])
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
+  decisions    ApplicationDecision[]
+}
+
+model Application {
+  id              String                 @id @default(cuid())
+  referenceNo     String                 @unique
+  applicantType   String
+  fullName        String
+  guardianName    String
+  cnic            String
+  mobile          String
+  email           String?
+  city            String
+  address         String
+  schoolName      String
+  schoolAddress   String
+  classGrade      String
+  previousMarks   String
+  feeAmount       Float
+  incomeInfo      String
+  hasDisability   Boolean                @default(false)
+  disabilityInfo  String?
+  feeChallanUrl   String
+  bFormUrl        String
+  incomeCertUrl   String
+  status          String                 @default("PENDING")
+  createdAt       DateTime               @default(now())
+  updatedAt       DateTime               @updatedAt
+  decisions       ApplicationDecision[]
+}
+
+model ApplicationDecision {
+  id            String      @id @default(cuid())
+  applicationId String
+  decidedById   String
+  action        String
+  comments      String
+  createdAt     DateTime    @default(now())
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  decidedBy     User        @relation(fields: [decidedById], references: [id])
+}
+
+model SiteSetting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String
+  updatedAt DateTime @updatedAt
+}

@@ -1,0 +1,13 @@
+# Use this schema on Vercel (PostgreSQL / Neon)
+# Copy to schema.prisma before deploy, or set provider via CI
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Models are identical to schema.prisma — keep in sync when changing schema.
