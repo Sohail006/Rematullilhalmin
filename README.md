@@ -7,7 +7,7 @@ Website for educational financial aid applications, board review, and public don
 ## Stack
 
 - Next.js (App Router) + TypeScript + Tailwind CSS
-- Prisma + SQLite (local) / PostgreSQL (Vercel via Neon)
+- Prisma + PostgreSQL (Neon recommended)
 - next-intl (English / Urdu)
 - JWT session auth + role-based permissions
 - Vercel Blob (production uploads) / local disk (development)
@@ -17,11 +17,12 @@ Website for educational financial aid applications, board review, and public don
 
 ```bash
 npm install
+# Set DATABASE_URL in .env (Neon or docker-compose postgres)
 npm run db:setup
 npm run dev
 ```
 
-**No Docker?** SQLite works locally out of the box. For Vercel, use Neon PostgreSQL (see Deploy section).
+Use [Neon](https://neon.tech) for a free PostgreSQL database, or run `docker compose up -d` for local Postgres.
 
 Open [http://localhost:3000](http://localhost:3000)
 

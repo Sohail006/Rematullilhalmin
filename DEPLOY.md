@@ -3,12 +3,8 @@
 ## 1. Database (Neon PostgreSQL)
 
 1. Create a free database at [neon.tech](https://neon.tech)
-2. Copy the connection string
-3. In `prisma/schema.prisma`, change:
-   ```prisma
-   provider = "postgresql"
-   ```
-4. Run once with production `DATABASE_URL`:
+2. Copy the connection string into `DATABASE_URL`
+3. Run once with your Neon `DATABASE_URL`:
    ```bash
    npx prisma db push
    npm run db:seed
