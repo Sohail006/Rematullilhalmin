@@ -1,10 +1,18 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { isDatabaseConfigured } from "@/lib/settings";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
 import { cnicSchema } from "@/lib/validations";
 
 export async function POST(request: Request) {
   try {
+    if (!isDatabaseConfigured()) {
+      return NextResponse.json(
+        { error: "Service temporarily unavailable" },
+        { status: 503 },
+      );
+    }
+
     const ip = clientIp(request);
     const limited = rateLimit(`status:${ip}`, 15, 60_000);
     if (!limited.ok) {

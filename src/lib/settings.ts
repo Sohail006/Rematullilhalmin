@@ -1,10 +1,19 @@
 import { prisma } from "@/lib/db";
 import type { ContactSettings, DonateSettings } from "@/lib/constants";
 
+export function isDatabaseConfigured(): boolean {
+  const url = process.env.DATABASE_URL ?? "";
+  return (
+    url.startsWith("postgresql://") || url.startsWith("postgres://")
+  );
+}
+
 export async function getSetting<T>(key: string, fallback: T): Promise<T> {
-  const row = await prisma.siteSetting.findUnique({ where: { key } });
-  if (!row) return fallback;
+  if (!isDatabaseConfigured()) return fallback;
+
   try {
+    const row = await prisma.siteSetting.findUnique({ where: { key } });
+    if (!row) return fallback;
     return JSON.parse(row.value) as T;
   } catch {
     return fallback;
@@ -12,6 +21,10 @@ export async function getSetting<T>(key: string, fallback: T): Promise<T> {
 }
 
 export async function setSetting(key: string, value: unknown) {
+  if (!isDatabaseConfigured()) {
+    throw new Error("DATABASE_URL is not configured");
+  }
+
   const serialized = JSON.stringify(value);
   await prisma.siteSetting.upsert({
     where: { key },
@@ -62,4 +75,21 @@ export function generateReferenceNo() {
   const year = new Date().getFullYear();
   const random = Math.floor(100000 + Math.random() * 900000);
   return `ASM-${year}-${random}`;
+}
+
+export async function generateUniqueReferenceNo(): Promise<string> {
+  if (!isDatabaseConfigured()) {
+    return generateReferenceNo();
+  }
+
+  for (let attempt = 0; attempt < 8; attempt += 1) {
+    const referenceNo = generateReferenceNo();
+    const existing = await prisma.application.findUnique({
+      where: { referenceNo },
+      select: { id: true },
+    });
+    if (!existing) return referenceNo;
+  }
+
+  return `ASM-${Date.now()}`;
 }

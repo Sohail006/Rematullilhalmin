@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { notifyAdminNewApplication } from "@/lib/email";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
-import { generateReferenceNo } from "@/lib/settings";
+import { generateUniqueReferenceNo, isDatabaseConfigured } from "@/lib/settings";
 import { saveUploadedFile } from "@/lib/uploads";
 import { applicationFormSchema } from "@/lib/validations";
 
@@ -10,6 +10,13 @@ export const runtime = "nodejs";
 
 export async function POST(request: Request) {
   try {
+    if (!isDatabaseConfigured()) {
+      return NextResponse.json(
+        { error: "Service temporarily unavailable. Please try again later." },
+        { status: 503 },
+      );
+    }
+
     const ip = clientIp(request);
     const limited = rateLimit(`apply:${ip}`, 5, 60_000);
     if (!limited.ok) {
@@ -93,9 +100,11 @@ export async function POST(request: Request) {
       saveUploadedFile(incomeCert, "income-cert"),
     ]);
 
+    const referenceNo = await generateUniqueReferenceNo();
+
     const application = await prisma.application.create({
       data: {
-        referenceNo: generateReferenceNo(),
+        referenceNo,
         applicantType: parsed.data.applicantType,
         fullName: parsed.data.fullName,
         guardianName: parsed.data.guardianName,

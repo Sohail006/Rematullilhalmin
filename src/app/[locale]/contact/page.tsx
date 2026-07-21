@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/config";
-import {
-  defaultContact,
-  getContactSettings,
-} from "@/lib/settings";
+import { getContactSettings } from "@/lib/settings";
 import { getPageMetadata } from "@/lib/metadata";
+
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,
@@ -24,7 +23,7 @@ export default async function ContactPage({
   const { locale } = await params;
   setRequestLocale(locale as Locale);
   const t = await getTranslations("contact");
-  const contact = await getContactSettings().catch(() => defaultContact);
+  const contact = await getContactSettings();
 
   const hasAny =
     contact.phone ||

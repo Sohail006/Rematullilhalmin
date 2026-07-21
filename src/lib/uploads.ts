@@ -31,9 +31,14 @@ export async function saveUploadedFile(
     const blob = await put(filename, bytes, {
       access: "public",
       contentType: file.type,
-      token: process.env.BLOB_READ_WRITE_TOKEN,
     });
     return blob.url;
+  }
+
+  if (process.env.VERCEL) {
+    throw new Error(
+      "File uploads require BLOB_READ_WRITE_TOKEN on Vercel. Add Vercel Blob storage to your project.",
+    );
   }
 
   const uploadDir = path.join(process.cwd(), "public", "uploads", folder);

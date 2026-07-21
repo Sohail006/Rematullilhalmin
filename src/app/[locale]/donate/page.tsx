@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/config";
-import { defaultDonate, getDonateSettings } from "@/lib/settings";
+import { getDonateSettings } from "@/lib/settings";
 import { getPageMetadata } from "@/lib/metadata";
+
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,
@@ -21,7 +23,7 @@ export default async function DonatePage({
   const { locale } = await params;
   setRequestLocale(locale as Locale);
   const t = await getTranslations("donate");
-  const donate = await getDonateSettings().catch(() => defaultDonate);
+  const donate = await getDonateSettings();
 
   const hasAny =
     (donate.bank.enabled &&
