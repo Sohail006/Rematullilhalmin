@@ -28,6 +28,14 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL || "https://alsiratulmustaqeem.org.pk",
   ),
+  icons: {
+    icon: [
+      { url: "/favicon.png", type: "image/png", sizes: "48x48" },
+      { url: "/logo.png", type: "image/png", sizes: "any" },
+    ],
+    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
+    shortcut: "/favicon.png",
+  },
   openGraph: {
     images: ["/logo.png"],
   },

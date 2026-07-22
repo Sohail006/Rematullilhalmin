@@ -10,14 +10,15 @@ const sizes = {
   hero: {
     width: 400,
     height: 400,
-    className: "w-[220px] sm:w-[300px] lg:w-[360px] xl:w-[400px] max-w-full h-auto",
+    className:
+      "w-[220px] sm:w-[300px] lg:w-[360px] xl:w-[400px] max-w-full h-auto drop-shadow-md",
     sizes: "(max-width: 640px) 220px, (max-width: 1024px) 300px, 400px",
   },
   auth: {
-    width: 112,
-    height: 112,
-    className: "h-24 w-24 sm:h-28 sm:w-28",
-    sizes: "112px",
+    width: 128,
+    height: 128,
+    className: "h-28 w-28 sm:h-32 sm:w-32",
+    sizes: "128px",
   },
   footer: {
     width: 48,
@@ -37,16 +38,16 @@ export function FoundationLogo({
   alt,
   size = "header",
   priority = false,
-  framed = false,
 }: {
   alt: string;
   size?: keyof typeof sizes;
   priority?: boolean;
+  /** @deprecated white frames removed — transparent logo sits cleanly */
   framed?: boolean;
 }) {
   const config = sizes[size];
 
-  const image = (
+  return (
     <Image
       src="/logo.png"
       alt={alt}
@@ -58,13 +59,4 @@ export function FoundationLogo({
       priority={priority}
     />
   );
-
-  if (!framed) return image;
-
-  const frameClass =
-    size === "hero"
-      ? "rounded-full bg-white p-3 sm:p-4 lg:p-5 shadow-lg ring-1 ring-brand-green/10"
-      : "rounded-full bg-white p-2.5 shadow-md ring-1 ring-brand-green/10";
-
-  return <div className={frameClass}>{image}</div>;
 }

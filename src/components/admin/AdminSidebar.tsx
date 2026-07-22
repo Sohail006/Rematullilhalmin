@@ -57,7 +57,7 @@ export function AdminSidebar({ user }: { user: SessionUser }) {
   return (
     <aside className="bg-brand-green text-white p-5 flex flex-col gap-6">
       <div className="flex items-center gap-3">
-        <div className="rounded-full bg-white/95 p-1 shrink-0">
+        <div className="shrink-0">
           <FoundationLogo alt="ASM Foundation" size="sidebar" />
         </div>
         <div>

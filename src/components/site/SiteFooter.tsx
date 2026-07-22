@@ -9,7 +9,7 @@ export async function SiteFooter() {
     <footer className="mt-16 border-t border-brand-green/10 bg-brand-green text-white">
       <div className="container-site py-10 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3 sm:gap-4">
-          <div className="rounded-full bg-white/95 p-1.5 shrink-0">
+          <div className="shrink-0">
             <FoundationLogo alt={brand("name")} size="footer" />
           </div>
           <div>
