@@ -42,7 +42,10 @@ export async function getPageMetadata(
   const path = page === "home" ? "" : `/${page}`;
 
   return {
-    title,
+    title:
+      page === "home"
+        ? { absolute: brand("name") }
+        : title,
     description,
     alternates: {
       canonical: `${siteUrl}/${locale}${path}`,

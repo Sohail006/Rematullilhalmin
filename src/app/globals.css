@@ -39,7 +39,7 @@ body {
   font-family: var(--font-dm-sans), system-ui, sans-serif;
 }
 
-[dir="rtl"] body {
+[dir="rtl"] {
   font-family: var(--font-noto-nastaliq), var(--font-dm-sans), serif;
 }
 

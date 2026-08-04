@@ -154,7 +154,10 @@ export default async function DonatePage({
               {t("monetaryText")}
             </p>
             <a href="#donation-details" className="btn-primary mt-6 self-start">
-              {t("monetaryCta")} →
+              {t("monetaryCta")}
+              <span aria-hidden className="ms-1 inline-block rtl:-scale-x-100">
+                →
+              </span>
             </a>
           </article>
 
@@ -174,7 +177,10 @@ export default async function DonatePage({
               rel={whatsapp || contact.email ? "noreferrer" : undefined}
               className="btn-gold mt-6 self-start"
             >
-              {t("inkindCta")} →
+              {t("inkindCta")}
+              <span aria-hidden className="ms-1 inline-block rtl:-scale-x-100">
+                →
+              </span>
             </a>
           </article>
         </div>
