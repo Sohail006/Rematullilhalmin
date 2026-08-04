@@ -20,6 +20,12 @@ const sizes = {
     className: "h-24 w-24 sm:h-28 sm:w-28 drop-shadow-md",
     sizes: "128px",
   },
+  badge: {
+    width: 96,
+    height: 96,
+    className: "h-[72px] w-[72px] sm:h-20 sm:w-20 lg:h-24 lg:w-24",
+    sizes: "96px",
+  },
   footer: {
     width: 48,
     height: 48,

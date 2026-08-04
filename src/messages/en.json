@@ -11,10 +11,13 @@
     "donate": "Donate",
     "contact": "Contact",
     "status": "Check status",
-    "boardLogin": "Board Login"
+    "boardLogin": "Board Login",
+    "applyShort": "Apply"
   },
   "home": {
     "urduDisplay": "اب پڑھے گا ہر بچہ",
+    "urduAccent": "اب پڑھے گا",
+    "urduRest": "ہر بچہ",
     "headline": "No child should stop studying",
     "headlineAccent": "because of money",
     "subhead": "We support deserving students so they can continue education with dignity and trust. Approved aid is paid directly to the school after board review.",

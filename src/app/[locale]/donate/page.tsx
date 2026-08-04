@@ -58,12 +58,14 @@ export default async function DonatePage({
 
   return (
     <div className="page-shell">
-      <section className="container-site relative py-12 sm:py-16">
-        <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
+      <section className="container-site relative py-10 sm:py-14 lg:py-16">
+        <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:gap-12">
           <div className="space-y-5 animate-fade-up">
             <h1 className="section-title text-4xl sm:text-5xl">{t("title")}</h1>
             <div className="gold-divider justify-start">
-              <span className="text-brand-gold text-xs">◆</span>
+              <span className="text-brand-gold text-xs" aria-hidden>
+                ◆
+              </span>
             </div>
             <p className="text-brand-muted text-lg leading-relaxed max-w-xl">
               {t("intro")}
@@ -71,7 +73,7 @@ export default async function DonatePage({
             <p className="text-brand-muted leading-relaxed max-w-xl">
               {t("intro2")}
             </p>
-            <div className="inline-flex items-center gap-3 rounded-full bg-brand-cream px-4 py-3 ring-1 ring-brand-green/10">
+            <div className="inline-flex items-center gap-3 rounded-full bg-white/80 px-4 py-3 ring-1 ring-brand-green/10">
               <span className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-green text-white">
                 <HandHeart className="h-5 w-5" />
               </span>
@@ -79,20 +81,23 @@ export default async function DonatePage({
             </div>
           </div>
 
-          <div className="relative animate-fade-up">
-            <div className="watercolor-frame overflow-hidden rounded-[1.75rem]">
+          <div className="relative animate-fade-up pb-10 sm:pb-8">
+            <div className="watercolor-frame">
               <Image
                 src="/images/donate-student.jpg"
                 alt={t("title")}
                 width={1100}
                 height={820}
-                className="w-full h-auto object-cover rounded-[1.75rem]"
+                className="w-full h-auto object-cover object-[center_15%] aspect-[5/4] sm:aspect-[4/3]"
                 priority
+                quality={95}
               />
             </div>
-            <div className="absolute -bottom-4 end-2 sm:end-6 max-w-[240px] rounded-xl bg-white/95 p-4 shadow-lg ring-1 ring-brand-green/10">
+            <div className="donate-quote absolute -bottom-1 start-2 sm:start-4 max-w-[min(260px,78%)]">
               <p className="font-display text-brand-green text-sm sm:text-base leading-snug">
-                <span className="text-brand-gold text-2xl me-1">“</span>
+                <span className="text-brand-gold text-2xl me-1" aria-hidden>
+                  “
+                </span>
                 {t("quote")}
               </p>
             </div>
@@ -100,24 +105,28 @@ export default async function DonatePage({
         </div>
       </section>
 
-      <section className="container-site py-14">
+      <section className="container-site py-12 sm:py-14">
         <div className="text-center mb-10">
           <div className="gold-divider mb-4">
-            <span className="text-brand-gold text-xs">◆</span>
+            <span className="text-brand-gold text-xs" aria-hidden>
+              ◆
+            </span>
           </div>
           <h2 className="section-title text-2xl sm:text-3xl">{t("whoTitle")}</h2>
         </div>
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4 items-stretch">
           {supporters.map(({ icon: Icon, title, text }) => (
             <article
               key={title}
-              className="rounded-2xl bg-white p-6 text-center shadow-sm ring-1 ring-brand-green/10"
+              className="supporter-card rounded-2xl bg-white p-6 text-center shadow-sm ring-1 ring-brand-green/10"
             >
               <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-brand-green text-white">
                 <Icon className="h-6 w-6" />
               </div>
               <h3 className="font-semibold text-brand-green">{title}</h3>
-              <p className="mt-2 text-sm text-brand-muted leading-relaxed">{text}</p>
+              <p className="mt-2 text-sm text-brand-muted leading-relaxed flex-1">
+                {text}
+              </p>
             </article>
           ))}
         </div>
@@ -126,42 +135,44 @@ export default async function DonatePage({
       <section className="container-site pb-10">
         <div className="text-center mb-10">
           <div className="gold-divider mb-4">
-            <span className="text-brand-gold text-xs">◆</span>
+            <span className="text-brand-gold text-xs" aria-hidden>
+              ◆
+            </span>
           </div>
           <h2 className="section-title text-2xl sm:text-3xl">{t("waysTitle")}</h2>
         </div>
 
         <div className="grid gap-5 lg:grid-cols-2">
-          <article className="rounded-2xl bg-brand-cream p-7 sm:p-8 ring-1 ring-brand-green/10">
+          <article className="rounded-2xl bg-brand-cream p-7 sm:p-8 ring-1 ring-brand-green/10 flex flex-col">
             <div className="flex h-16 w-16 items-center justify-center rounded-full bg-brand-green text-white">
               <HandHeart className="h-7 w-7" />
             </div>
             <h3 className="mt-5 font-display text-2xl text-brand-green font-semibold">
               {t("monetaryTitle")}
             </h3>
-            <p className="mt-3 text-brand-muted leading-relaxed">
+            <p className="mt-3 text-brand-muted leading-relaxed flex-1">
               {t("monetaryText")}
             </p>
-            <a href="#donation-details" className="btn-primary mt-6">
+            <a href="#donation-details" className="btn-primary mt-6 self-start">
               {t("monetaryCta")} →
             </a>
           </article>
 
-          <article className="rounded-2xl bg-[#f4ead2] p-7 sm:p-8 ring-1 ring-brand-gold/30">
+          <article className="rounded-2xl bg-[#f4ead2] p-7 sm:p-8 ring-1 ring-brand-gold/30 flex flex-col">
             <div className="flex h-16 w-16 items-center justify-center rounded-full bg-brand-gold text-brand-ink">
               <Package className="h-7 w-7" />
             </div>
             <h3 className="mt-5 font-display text-2xl text-brand-green font-semibold">
               {t("inkindTitle")}
             </h3>
-            <p className="mt-3 text-brand-muted leading-relaxed">
+            <p className="mt-3 text-brand-muted leading-relaxed flex-1">
               {t("inkindText")}
             </p>
             <a
               href={inkindHref}
               target={whatsapp || contact.email ? "_blank" : undefined}
               rel={whatsapp || contact.email ? "noreferrer" : undefined}
-              className="btn-gold mt-6"
+              className="btn-gold mt-6 self-start"
             >
               {t("inkindCta")} →
             </a>

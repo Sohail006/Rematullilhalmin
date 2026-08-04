@@ -9,7 +9,6 @@ import {
   GraduationCap,
   HandHeart,
   HeartHandshake,
-  Plane,
   ShieldCheck,
   Users,
 } from "lucide-react";
@@ -53,27 +52,24 @@ export default async function HomePage({
 
   return (
     <div className="page-shell">
-      <section className="container-site relative py-10 sm:py-14 lg:py-18">
-        <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-12">
-          <div className="order-2 lg:order-1 space-y-6 animate-fade-up">
-            <div className="relative inline-block">
-              <p
-                className="font-display text-4xl sm:text-5xl lg:text-[3.4rem] font-semibold text-brand-green leading-tight"
-                dir="rtl"
-              >
-                <span className="text-brand-gold">{t("urduDisplay").slice(0, 8)}</span>
-                {t("urduDisplay").slice(8)}
-              </p>
-              <GraduationCap className="absolute -top-2 start-0 h-6 w-6 text-brand-green/70" />
-              <Plane className="absolute -end-2 top-1 h-5 w-5 text-brand-green rotate-12 animate-float" />
-            </div>
+      <section className="container-site relative py-8 sm:py-12 lg:py-16">
+        <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-14">
+          <div className="order-2 lg:order-1 space-y-5 sm:space-y-6 animate-fade-up">
+            <p
+              className="font-urdu-hero text-[2.15rem] sm:text-5xl lg:text-[3.35rem] font-semibold text-brand-green leading-[1.45]"
+              dir="rtl"
+              lang="ur"
+            >
+              <span className="text-brand-gold">{t("urduAccent")}</span>{" "}
+              {t("urduRest")}
+            </p>
 
-            <h1 className="text-2xl sm:text-3xl lg:text-[2rem] font-semibold text-brand-green leading-snug max-w-xl">
+            <h1 className="text-[1.65rem] sm:text-3xl lg:text-[2.05rem] font-semibold text-brand-green leading-snug max-w-xl tracking-tight">
               {t("headline")}{" "}
               <span className="text-brand-green-deep">{t("headlineAccent")}</span>
             </h1>
 
-            <p className="text-brand-muted max-w-xl leading-relaxed text-[1.02rem]">
+            <p className="text-brand-muted max-w-xl leading-relaxed text-base sm:text-[1.05rem]">
               {t("subhead")}
             </p>
 
@@ -90,7 +86,7 @@ export default async function HomePage({
           </div>
 
           <div className="order-1 lg:order-2 flex justify-center animate-fade-up">
-            <div className="relative w-full max-w-[460px]">
+            <div className="relative w-full max-w-[420px] pb-2">
               <div className="hero-orb mx-auto">
                 <Image
                   src="/images/hero-student.jpg"
@@ -98,23 +94,24 @@ export default async function HomePage({
                   width={920}
                   height={920}
                   priority
-                  className="object-cover"
+                  quality={95}
+                  className="object-cover object-[center_20%]"
                 />
               </div>
 
-              <div className="absolute -top-2 -end-1 sm:top-2 sm:end-0 w-24 sm:w-32 animate-float">
-                <FoundationLogo alt={brand("name")} size="auth" priority />
+              <div className="hero-logo-badge absolute -top-1 end-0 sm:top-1 sm:end-1">
+                <FoundationLogo alt={brand("name")} size="badge" priority />
               </div>
 
-              <div className="absolute inset-x-2 -bottom-4 sm:inset-x-4 sm:-bottom-5 rounded-2xl bg-brand-green text-white shadow-xl px-3 py-3 sm:px-4 sm:py-3.5">
-                <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-2">
+              <div className="hero-value-bar mt-5 sm:mt-6">
+                <div className="grid grid-cols-2 gap-y-3 gap-x-2 sm:grid-cols-4 sm:gap-2">
                   {pills.map(({ icon: Icon, label }) => (
                     <div
                       key={label}
-                      className="flex flex-col items-center text-center gap-1.5"
+                      className="flex flex-col items-center text-center gap-1.5 px-1"
                     >
-                      <Icon className="h-4 w-4 text-brand-gold-soft" />
-                      <span className="text-[10px] sm:text-[11px] leading-tight text-white/95">
+                      <Icon className="h-4 w-4 text-brand-gold-soft shrink-0" />
+                      <span className="text-[10px] sm:text-[11px] leading-snug text-white/95">
                         {label}
                       </span>
                     </div>
@@ -126,7 +123,7 @@ export default async function HomePage({
         </div>
       </section>
 
-      <section className="container-site pt-16 sm:pt-20 pb-10">
+      <section className="container-site pt-14 sm:pt-18 pb-10">
         <h2 className="section-title text-center text-2xl sm:text-3xl">
           {t("missionTitle")}{" "}
           <span className="relative inline-block">
@@ -135,27 +132,35 @@ export default async function HomePage({
           </span>
         </h2>
 
-        <div className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-10 grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
           {missions.map(({ icon: Icon, title, text }) => (
             <article key={title} className="text-center px-2">
               <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-brand-green/10">
                 <Icon className="h-7 w-7 text-brand-green" />
               </div>
               <h3 className="font-semibold text-brand-green text-lg">{title}</h3>
-              <p className="mt-2 text-sm text-brand-muted leading-relaxed">{text}</p>
+              <p className="mt-2 text-sm text-brand-muted leading-relaxed">
+                {text}
+              </p>
             </article>
           ))}
         </div>
 
-        <p className="mt-12 text-center font-display text-xl sm:text-2xl text-brand-green">
-          <span className="text-brand-gold text-3xl align-top me-1">“</span>
-          {t("quote")}
-          <span className="text-brand-gold text-3xl align-top ms-1">”</span>
-        </p>
+        <blockquote className="mt-14 mx-auto max-w-2xl text-center">
+          <p className="font-display text-xl sm:text-2xl text-brand-green leading-relaxed">
+            <span className="text-brand-gold text-3xl align-top me-1" aria-hidden>
+              “
+            </span>
+            {t("quote")}
+            <span className="text-brand-gold text-3xl align-top ms-1" aria-hidden>
+              ”
+            </span>
+          </p>
+        </blockquote>
       </section>
 
       <section className="container-site py-12">
-        <div className="rounded-2xl bg-white/80 border border-brand-green/10 p-6 sm:p-8">
+        <div className="rounded-2xl bg-white/85 border border-brand-green/10 p-6 sm:p-8">
           <div className="flex items-center gap-2 mb-6">
             <Building2 className="h-5 w-5 text-brand-gold" />
             <h2 className="section-title text-2xl">{t("howTitle")}</h2>
