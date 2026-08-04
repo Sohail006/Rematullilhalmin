@@ -54,7 +54,7 @@ export default async function HomePage({
     <div className="page-shell">
       <section className="container-site relative py-8 sm:py-12 lg:py-16">
         <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-14">
-          <div className="order-2 lg:order-1 space-y-5 sm:space-y-6 animate-fade-up">
+          <div className="order-2 lg:order-1 space-y-5 sm:space-y-6">
             <p
               className="font-urdu-hero text-[2.15rem] sm:text-5xl lg:text-[3.35rem] font-semibold text-brand-green leading-[1.45]"
               dir="rtl"
@@ -85,7 +85,7 @@ export default async function HomePage({
             </div>
           </div>
 
-          <div className="order-1 lg:order-2 flex justify-center animate-fade-up">
+          <div className="order-1 lg:order-2 flex justify-center">
             <div className="relative w-full max-w-[420px] pb-2">
               <div className="hero-orb mx-auto">
                 <Image

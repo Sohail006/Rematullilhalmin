@@ -132,7 +132,7 @@ body {
 
 .page-shell {
   position: relative;
-  overflow: hidden;
+  overflow-x: clip;
 }
 
 .page-shell::before {
@@ -140,9 +140,15 @@ body {
   position: absolute;
   inset: 0;
   pointer-events: none;
+  z-index: 0;
   background-image:
     radial-gradient(circle at 8% 12%, rgba(196, 163, 90, 0.08), transparent 28%),
     radial-gradient(circle at 92% 8%, rgba(20, 74, 50, 0.06), transparent 26%);
+}
+
+.page-shell > * {
+  position: relative;
+  z-index: 1;
 }
 
 .font-urdu-hero {
@@ -267,8 +273,8 @@ body {
 
 @keyframes fadeUp {
   from {
-    opacity: 0;
-    transform: translateY(16px);
+    opacity: 0.35;
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
@@ -287,11 +293,23 @@ body {
 }
 
 .animate-fade-up {
-  animation: fadeUp 0.75s ease both;
+  /* Do not use fill-mode:both — if animation is blocked, content stayed at opacity:0 */
+  opacity: 1;
+  animation: fadeUp 0.65s ease-out;
 }
 
 .animate-float {
   animation: softFloat 5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-up,
+  .animate-float,
+  .hero-logo-badge {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
 
 @media (max-width: 900px) {

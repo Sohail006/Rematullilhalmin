@@ -60,7 +60,7 @@ export default async function DonatePage({
     <div className="page-shell">
       <section className="container-site relative py-10 sm:py-14 lg:py-16">
         <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:gap-12">
-          <div className="space-y-5 animate-fade-up">
+          <div className="space-y-5">
             <h1 className="section-title text-4xl sm:text-5xl">{t("title")}</h1>
             <div className="gold-divider justify-start">
               <span className="text-brand-gold text-xs" aria-hidden>
@@ -81,7 +81,7 @@ export default async function DonatePage({
             </div>
           </div>
 
-          <div className="relative animate-fade-up pb-10 sm:pb-8">
+          <div className="relative pb-10 sm:pb-8">
             <div className="watercolor-frame">
               <Image
                 src="/images/donate-student.jpg"
