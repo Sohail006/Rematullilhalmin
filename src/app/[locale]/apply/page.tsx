@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/config";
 import { ApplyForm } from "@/components/site/ApplyForm";
 import { getPageMetadata } from "@/lib/metadata";
+import { PageHero } from "@/components/site/PageHero";
 
 export async function generateMetadata({
   params,
@@ -23,12 +24,10 @@ export default async function ApplyPage({
   const t = await getTranslations("apply");
 
   return (
-    <div className="container-site py-14 max-w-3xl">
-      <h1 className="font-display text-3xl font-semibold text-brand-green">
-        {t("title")}
-      </h1>
-      <p className="mt-3 text-brand-muted mb-10">{t("intro")}</p>
-      <ApplyForm />
-    </div>
+    <PageHero title={t("title")} intro={t("intro")}>
+      <div className="rounded-2xl bg-white/90 p-5 sm:p-8 ring-1 ring-brand-green/10 shadow-sm">
+        <ApplyForm />
+      </div>
+    </PageHero>
   );
 }

@@ -1,8 +1,18 @@
+import Image from "next/image";
 import type { Metadata } from "next";
+import {
+  Building2,
+  HandHeart,
+  Handshake,
+  Package,
+  UserRound,
+  Users,
+} from "lucide-react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/config";
 import { getDonateSettings } from "@/lib/settings";
 import { getPageMetadata } from "@/lib/metadata";
+import { getContactSettings } from "@/lib/settings";
 
 export const dynamic = "force-dynamic";
 
@@ -24,6 +34,7 @@ export default async function DonatePage({
   setRequestLocale(locale as Locale);
   const t = await getTranslations("donate");
   const donate = await getDonateSettings();
+  const contact = await getContactSettings();
 
   const hasAny =
     (donate.bank.enabled &&
@@ -31,109 +42,223 @@ export default async function DonatePage({
     (donate.jazzcash.enabled && donate.jazzcash.mobileNumber) ||
     (donate.easypaisa.enabled && donate.easypaisa.mobileNumber);
 
+  const supporters = [
+    { icon: UserRound, title: t("who1Title"), text: t("who1Text") },
+    { icon: Handshake, title: t("who2Title"), text: t("who2Text") },
+    { icon: Building2, title: t("who3Title"), text: t("who3Text") },
+    { icon: Users, title: t("who4Title"), text: t("who4Text") },
+  ];
+
+  const whatsapp = contact.whatsapp?.replace(/\D/g, "");
+  const inkindHref = whatsapp
+    ? `https://wa.me/${whatsapp}?text=${encodeURIComponent("I would like to offer in-kind support.")}`
+    : contact.email
+      ? `mailto:${contact.email}?subject=In-kind%20donation`
+      : `/${locale}/contact`;
+
   return (
-    <div className="container-site py-14">
-      <h1 className="font-display text-3xl font-semibold text-brand-green">
-        {t("title")}
-      </h1>
-      <p className="mt-3 text-brand-muted max-w-2xl">{t("intro")}</p>
-      {donate.note ? (
-        <p className="mt-4 text-brand-green font-medium">{donate.note}</p>
-      ) : null}
+    <div className="page-shell">
+      <section className="container-site relative py-12 sm:py-16">
+        <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
+          <div className="space-y-5 animate-fade-up">
+            <h1 className="section-title text-4xl sm:text-5xl">{t("title")}</h1>
+            <div className="gold-divider justify-start">
+              <span className="text-brand-gold text-xs">◆</span>
+            </div>
+            <p className="text-brand-muted text-lg leading-relaxed max-w-xl">
+              {t("intro")}
+            </p>
+            <p className="text-brand-muted leading-relaxed max-w-xl">
+              {t("intro2")}
+            </p>
+            <div className="inline-flex items-center gap-3 rounded-full bg-brand-cream px-4 py-3 ring-1 ring-brand-green/10">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-green text-white">
+                <HandHeart className="h-5 w-5" />
+              </span>
+              <span className="text-brand-green font-medium">{t("impact")}</span>
+            </div>
+          </div>
 
-      {!hasAny ? (
-        <p className="mt-10 text-brand-muted">{t("empty")}</p>
-      ) : (
-        <div className="mt-10 grid gap-6 md:grid-cols-3">
-          {donate.bank.enabled ? (
-            <article className="border border-brand-green/15 bg-brand-cream p-6">
-              <h2 className="font-display text-xl text-brand-green font-semibold">
-                {t("bank")}
-              </h2>
-              <dl className="mt-4 space-y-2 text-sm text-brand-muted">
-                {donate.bank.bankName ? (
-                  <div>
-                    <dt className="font-semibold text-brand-ink">
-                      {t("bankName")}
-                    </dt>
-                    <dd>{donate.bank.bankName}</dd>
-                  </div>
-                ) : null}
-                <div>
-                  <dt className="font-semibold text-brand-ink">
-                    {t("accountTitle")}
-                  </dt>
-                  <dd>{donate.bank.accountTitle}</dd>
-                </div>
-                {donate.bank.accountNumber ? (
-                  <div>
-                    <dt className="font-semibold text-brand-ink">
-                      {t("accountNumber")}
-                    </dt>
-                    <dd className="font-mono">{donate.bank.accountNumber}</dd>
-                  </div>
-                ) : null}
-                {donate.bank.iban ? (
-                  <div>
-                    <dt className="font-semibold text-brand-ink">{t("iban")}</dt>
-                    <dd className="font-mono">{donate.bank.iban}</dd>
-                  </div>
-                ) : null}
-                {donate.bank.branch ? (
-                  <div>
-                    <dt className="font-semibold text-brand-ink">{t("branch")}</dt>
-                    <dd>{donate.bank.branch}</dd>
-                  </div>
-                ) : null}
-              </dl>
-            </article>
-          ) : null}
-
-          {donate.jazzcash.enabled ? (
-            <article className="border border-brand-green/15 bg-brand-cream p-6">
-              <h2 className="font-display text-xl text-brand-green font-semibold">
-                {t("jazzcash")}
-              </h2>
-              <dl className="mt-4 space-y-2 text-sm text-brand-muted">
-                <div>
-                  <dt className="font-semibold text-brand-ink">
-                    {t("accountTitle")}
-                  </dt>
-                  <dd>{donate.jazzcash.accountName}</dd>
-                </div>
-                <div>
-                  <dt className="font-semibold text-brand-ink">
-                    {t("mobileAccount")}
-                  </dt>
-                  <dd className="font-mono">{donate.jazzcash.mobileNumber}</dd>
-                </div>
-              </dl>
-            </article>
-          ) : null}
-
-          {donate.easypaisa.enabled ? (
-            <article className="border border-brand-green/15 bg-brand-cream p-6">
-              <h2 className="font-display text-xl text-brand-green font-semibold">
-                {t("easypaisa")}
-              </h2>
-              <dl className="mt-4 space-y-2 text-sm text-brand-muted">
-                <div>
-                  <dt className="font-semibold text-brand-ink">
-                    {t("accountTitle")}
-                  </dt>
-                  <dd>{donate.easypaisa.accountName}</dd>
-                </div>
-                <div>
-                  <dt className="font-semibold text-brand-ink">
-                    {t("mobileAccount")}
-                  </dt>
-                  <dd className="font-mono">{donate.easypaisa.mobileNumber}</dd>
-                </div>
-              </dl>
-            </article>
-          ) : null}
+          <div className="relative animate-fade-up">
+            <div className="watercolor-frame overflow-hidden rounded-[1.75rem]">
+              <Image
+                src="/images/donate-student.jpg"
+                alt={t("title")}
+                width={1100}
+                height={820}
+                className="w-full h-auto object-cover rounded-[1.75rem]"
+                priority
+              />
+            </div>
+            <div className="absolute -bottom-4 end-2 sm:end-6 max-w-[240px] rounded-xl bg-white/95 p-4 shadow-lg ring-1 ring-brand-green/10">
+              <p className="font-display text-brand-green text-sm sm:text-base leading-snug">
+                <span className="text-brand-gold text-2xl me-1">“</span>
+                {t("quote")}
+              </p>
+            </div>
+          </div>
         </div>
-      )}
+      </section>
+
+      <section className="container-site py-14">
+        <div className="text-center mb-10">
+          <div className="gold-divider mb-4">
+            <span className="text-brand-gold text-xs">◆</span>
+          </div>
+          <h2 className="section-title text-2xl sm:text-3xl">{t("whoTitle")}</h2>
+        </div>
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {supporters.map(({ icon: Icon, title, text }) => (
+            <article
+              key={title}
+              className="rounded-2xl bg-white p-6 text-center shadow-sm ring-1 ring-brand-green/10"
+            >
+              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-brand-green text-white">
+                <Icon className="h-6 w-6" />
+              </div>
+              <h3 className="font-semibold text-brand-green">{title}</h3>
+              <p className="mt-2 text-sm text-brand-muted leading-relaxed">{text}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="container-site pb-10">
+        <div className="text-center mb-10">
+          <div className="gold-divider mb-4">
+            <span className="text-brand-gold text-xs">◆</span>
+          </div>
+          <h2 className="section-title text-2xl sm:text-3xl">{t("waysTitle")}</h2>
+        </div>
+
+        <div className="grid gap-5 lg:grid-cols-2">
+          <article className="rounded-2xl bg-brand-cream p-7 sm:p-8 ring-1 ring-brand-green/10">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-brand-green text-white">
+              <HandHeart className="h-7 w-7" />
+            </div>
+            <h3 className="mt-5 font-display text-2xl text-brand-green font-semibold">
+              {t("monetaryTitle")}
+            </h3>
+            <p className="mt-3 text-brand-muted leading-relaxed">
+              {t("monetaryText")}
+            </p>
+            <a href="#donation-details" className="btn-primary mt-6">
+              {t("monetaryCta")} →
+            </a>
+          </article>
+
+          <article className="rounded-2xl bg-[#f4ead2] p-7 sm:p-8 ring-1 ring-brand-gold/30">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-brand-gold text-brand-ink">
+              <Package className="h-7 w-7" />
+            </div>
+            <h3 className="mt-5 font-display text-2xl text-brand-green font-semibold">
+              {t("inkindTitle")}
+            </h3>
+            <p className="mt-3 text-brand-muted leading-relaxed">
+              {t("inkindText")}
+            </p>
+            <a
+              href={inkindHref}
+              target={whatsapp || contact.email ? "_blank" : undefined}
+              rel={whatsapp || contact.email ? "noreferrer" : undefined}
+              className="btn-gold mt-6"
+            >
+              {t("inkindCta")} →
+            </a>
+          </article>
+        </div>
+      </section>
+
+      <section id="donation-details" className="container-site pb-16 scroll-mt-24">
+        <h2 className="section-title text-2xl mb-6">{t("detailsTitle")}</h2>
+        {donate.note ? (
+          <p className="mb-6 text-brand-green font-medium">{donate.note}</p>
+        ) : null}
+
+        {!hasAny ? (
+          <p className="text-brand-muted rounded-xl bg-white p-6 ring-1 ring-brand-green/10">
+            {t("empty")}
+          </p>
+        ) : (
+          <div className="grid gap-5 md:grid-cols-3">
+            {donate.bank.enabled ? (
+              <article className="rounded-2xl bg-white p-6 ring-1 ring-brand-green/10">
+                <h3 className="font-display text-xl text-brand-green font-semibold">
+                  {t("bank")}
+                </h3>
+                <dl className="mt-4 space-y-2 text-sm text-brand-muted">
+                  {donate.bank.bankName ? (
+                    <div>
+                      <dt className="font-semibold text-brand-ink">{t("bankName")}</dt>
+                      <dd>{donate.bank.bankName}</dd>
+                    </div>
+                  ) : null}
+                  <div>
+                    <dt className="font-semibold text-brand-ink">{t("accountTitle")}</dt>
+                    <dd>{donate.bank.accountTitle}</dd>
+                  </div>
+                  {donate.bank.accountNumber ? (
+                    <div>
+                      <dt className="font-semibold text-brand-ink">
+                        {t("accountNumber")}
+                      </dt>
+                      <dd className="font-mono">{donate.bank.accountNumber}</dd>
+                    </div>
+                  ) : null}
+                  {donate.bank.iban ? (
+                    <div>
+                      <dt className="font-semibold text-brand-ink">{t("iban")}</dt>
+                      <dd className="font-mono">{donate.bank.iban}</dd>
+                    </div>
+                  ) : null}
+                  {donate.bank.branch ? (
+                    <div>
+                      <dt className="font-semibold text-brand-ink">{t("branch")}</dt>
+                      <dd>{donate.bank.branch}</dd>
+                    </div>
+                  ) : null}
+                </dl>
+              </article>
+            ) : null}
+
+            {donate.jazzcash.enabled ? (
+              <article className="rounded-2xl bg-white p-6 ring-1 ring-brand-green/10">
+                <h3 className="font-display text-xl text-brand-green font-semibold">
+                  {t("jazzcash")}
+                </h3>
+                <dl className="mt-4 space-y-2 text-sm text-brand-muted">
+                  <div>
+                    <dt className="font-semibold text-brand-ink">{t("accountTitle")}</dt>
+                    <dd>{donate.jazzcash.accountName}</dd>
+                  </div>
+                  <div>
+                    <dt className="font-semibold text-brand-ink">{t("mobileAccount")}</dt>
+                    <dd className="font-mono">{donate.jazzcash.mobileNumber}</dd>
+                  </div>
+                </dl>
+              </article>
+            ) : null}
+
+            {donate.easypaisa.enabled ? (
+              <article className="rounded-2xl bg-white p-6 ring-1 ring-brand-green/10">
+                <h3 className="font-display text-xl text-brand-green font-semibold">
+                  {t("easypaisa")}
+                </h3>
+                <dl className="mt-4 space-y-2 text-sm text-brand-muted">
+                  <div>
+                    <dt className="font-semibold text-brand-ink">{t("accountTitle")}</dt>
+                    <dd>{donate.easypaisa.accountName}</dd>
+                  </div>
+                  <div>
+                    <dt className="font-semibold text-brand-ink">{t("mobileAccount")}</dt>
+                    <dd className="font-mono">{donate.easypaisa.mobileNumber}</dd>
+                  </div>
+                </dl>
+              </article>
+            ) : null}
+          </div>
+        )}
+      </section>
     </div>
   );
 }

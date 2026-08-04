@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/config";
 import { getContactSettings } from "@/lib/settings";
 import { getPageMetadata } from "@/lib/metadata";
+import { PageHero } from "@/components/site/PageHero";
 
 export const dynamic = "force-dynamic";
 
@@ -33,16 +34,13 @@ export default async function ContactPage({
     contact.officeHours;
 
   return (
-    <div className="container-site py-14 max-w-3xl">
-      <h1 className="font-display text-3xl font-semibold text-brand-green">
-        {t("title")}
-      </h1>
-      <p className="mt-3 text-brand-muted">{t("intro")}</p>
-
+    <PageHero title={t("title")} intro={t("intro")}>
       {!hasAny ? (
-        <p className="mt-10 text-brand-muted">{t("empty")}</p>
+        <p className="text-brand-muted rounded-2xl bg-white p-6 ring-1 ring-brand-green/10">
+          {t("empty")}
+        </p>
       ) : (
-        <dl className="mt-10 space-y-5">
+        <dl className="space-y-5 rounded-2xl bg-white p-6 sm:p-8 ring-1 ring-brand-green/10">
           {contact.phone ? (
             <div>
               <dt className="font-semibold text-brand-ink">{t("phone")}</dt>
@@ -104,6 +102,6 @@ export default async function ContactPage({
           </div>
         </dl>
       )}
-    </div>
+    </PageHero>
   );
 }

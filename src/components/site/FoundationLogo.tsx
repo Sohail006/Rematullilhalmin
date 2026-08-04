@@ -17,7 +17,7 @@ const sizes = {
   auth: {
     width: 128,
     height: 128,
-    className: "h-28 w-28 sm:h-32 sm:w-32",
+    className: "h-24 w-24 sm:h-28 sm:w-28 drop-shadow-md",
     sizes: "128px",
   },
   footer: {

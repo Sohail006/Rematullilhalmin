@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/config";
 import { getPageMetadata } from "@/lib/metadata";
+import { PageHero } from "@/components/site/PageHero";
 
 export async function generateMetadata({
   params,
@@ -22,15 +23,12 @@ export default async function AboutPage({
   const t = await getTranslations("about");
 
   return (
-    <div className="container-site py-14 max-w-3xl">
-      <h1 className="font-display text-3xl font-semibold text-brand-green">
-        {t("title")}
-      </h1>
-      <div className="mt-8 space-y-5 text-brand-muted leading-relaxed text-lg">
+    <PageHero title={t("title")} intro={t("intro")}>
+      <div className="space-y-5 text-brand-muted leading-relaxed text-lg rounded-2xl bg-white/80 p-6 sm:p-8 ring-1 ring-brand-green/10">
         <p>{t("p1")}</p>
         <p>{t("p2")}</p>
         <p className="text-brand-green font-medium">{t("p3")}</p>
       </div>
-    </div>
+    </PageHero>
   );
 }
