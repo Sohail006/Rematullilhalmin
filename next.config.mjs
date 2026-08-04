@@ -4,6 +4,9 @@ const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  images: {
+    qualities: [75, 95],
+  },
   experimental: {
     serverActions: {
       bodySizeLimit: "8mb",
