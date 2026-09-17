@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { Heart, Mail, Menu, UserRound, X } from "lucide-react";
-import { useState } from "react";
+import { Heart, Mail, UserRound } from "lucide-react";
+import { useEffect, useId, useState } from "react";
 import type { Locale } from "@/i18n/config";
 import { FoundationLogo } from "@/components/site/FoundationLogo";
 
@@ -19,6 +19,28 @@ const links = [
   { href: "/contact", key: "contact" as const },
 ];
 
+function MenuGlyph({ open }: { open: boolean }) {
+  return (
+    <span className="relative block h-3.5 w-4" aria-hidden>
+      <span
+        className={`absolute start-0 top-0 h-0.5 w-4 rounded-full bg-current transition-all duration-200 ${
+          open ? "top-1.5 rotate-45" : ""
+        }`}
+      />
+      <span
+        className={`absolute start-0 top-1.5 h-0.5 w-4 rounded-full bg-current transition-all duration-200 ${
+          open ? "opacity-0 scale-x-50" : ""
+        }`}
+      />
+      <span
+        className={`absolute start-0 top-3 h-0.5 w-4 rounded-full bg-current transition-all duration-200 ${
+          open ? "top-1.5 -rotate-45" : ""
+        }`}
+      />
+    </span>
+  );
+}
+
 export function SiteHeader({
   locale,
   email,
@@ -31,9 +53,14 @@ export function SiteHeader({
   const brand = useTranslations("brand");
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const menuId = useId();
   const otherLocale = locale === "en" ? "ur" : "en";
   const switchedPath = pathname.replace(`/${locale}`, `/${otherLocale}`);
   const homePath = `/${locale}`;
+
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
 
   function resolveHref(link: (typeof links)[number]) {
     if (link.hash) {
@@ -129,42 +156,72 @@ export function SiteHeader({
             </Link>
             <button
               type="button"
-              className="xl:hidden rounded-full border border-brand-green/25 p-2 text-brand-green"
+              className={`xl:hidden inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold transition-colors ${
+                open
+                  ? "bg-brand-green text-white shadow-sm"
+                  : "border border-brand-green/20 bg-white text-brand-green hover:bg-brand-green-soft"
+              }`}
               onClick={() => setOpen((v) => !v)}
-              aria-label="Menu"
+              aria-label={open ? t("closeMenu") : t("menu")}
               aria-expanded={open}
+              aria-controls={menuId}
             >
-              {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+              <MenuGlyph open={open} />
+              <span className="hidden sm:inline">
+                {open ? t("closeMenu") : t("menu")}
+              </span>
             </button>
           </div>
         </div>
 
         {open ? (
-          <div className="xl:hidden border-t border-brand-green/10 bg-white px-4 py-4 flex flex-col gap-3">
-            {links.map((link) => (
-              <Link
-                key={link.key}
-                href={resolveHref(link)}
-                onClick={() => setOpen(false)}
-                className="text-sm font-medium text-brand-green"
-              >
-                {t(link.key)}
-              </Link>
-            ))}
-            <Link
-              href={`/${locale}/status`}
-              onClick={() => setOpen(false)}
-              className="text-sm font-medium text-brand-muted"
-            >
-              {t("status")}
-            </Link>
-            <Link
-              href="/admin/login"
-              onClick={() => setOpen(false)}
-              className="btn-primary text-sm py-2.5"
-            >
-              {t("boardLogin")}
-            </Link>
+          <div
+            id={menuId}
+            className="xl:hidden border-t border-brand-green/10 bg-gradient-to-b from-white to-[#f7f8f6]"
+          >
+            <div className="container-site py-4 space-y-1">
+              {links.map((link) => {
+                const href = resolveHref(link);
+                const active =
+                  !link.hash &&
+                  (link.href === ""
+                    ? pathname === homePath || pathname === `${homePath}/`
+                    : pathname.startsWith(`/${locale}${link.href}`));
+                return (
+                  <Link
+                    key={link.key}
+                    href={href}
+                    onClick={() => setOpen(false)}
+                    className={`flex items-center justify-between rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
+                      active
+                        ? "bg-brand-green-soft text-brand-green"
+                        : "text-brand-ink hover:bg-white hover:text-brand-green"
+                    }`}
+                  >
+                    <span>{t(link.key)}</span>
+                    {active ? (
+                      <span className="h-1.5 w-1.5 rounded-full bg-brand-yellow" />
+                    ) : null}
+                  </Link>
+                );
+              })}
+              <div className="pt-3 mt-2 border-t border-brand-green/10 grid gap-2 sm:grid-cols-2">
+                <Link
+                  href={`/${locale}/status`}
+                  onClick={() => setOpen(false)}
+                  className="inline-flex items-center justify-center rounded-full border border-brand-green/20 bg-white px-4 py-2.5 text-sm font-semibold text-brand-green hover:bg-brand-green-soft"
+                >
+                  {t("status")}
+                </Link>
+                <Link
+                  href="/admin/login"
+                  onClick={() => setOpen(false)}
+                  className="btn-primary text-sm py-2.5 lg:hidden"
+                >
+                  {t("boardLogin")}
+                </Link>
+              </div>
+            </div>
           </div>
         ) : null}
       </div>

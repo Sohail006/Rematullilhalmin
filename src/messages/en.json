@@ -17,6 +17,8 @@
     "contact": "Contact",
     "status": "Check status",
     "boardLogin": "Board Login",
+    "menu": "Menu",
+    "closeMenu": "Close",
     "applyShort": "Apply"
   },
   "topbar": {
