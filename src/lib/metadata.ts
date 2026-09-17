@@ -35,7 +35,7 @@ export async function getPageMetadata(
   const description =
     page === "home"
       ? await getTranslations({ locale, namespace: "home" }).then((t) =>
-          t("subhead"),
+          t("heroText"),
         )
       : title;
 

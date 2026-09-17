@@ -30,7 +30,7 @@ export function ApplyForm() {
       });
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.error || "Submission failed");
+        throw new Error(data.error || t("submitFailed"));
       }
       setSuccessRef(data.referenceNo);
       form.reset();
@@ -38,7 +38,7 @@ export function ApplyForm() {
       setCnic("");
       setMobile("");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Submission failed");
+      setError(err instanceof Error ? err.message : t("submitFailed"));
     } finally {
       setLoading(false);
     }

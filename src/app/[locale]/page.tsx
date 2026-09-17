@@ -118,7 +118,9 @@ export default async function HomePage({
             <p className="mt-5 text-white/90 text-base sm:text-lg leading-relaxed max-w-xl">
               {t("heroText")}
             </p>
-            <p className="font-script text-brand-yellow text-2xl sm:text-3xl mt-5 leading-snug">
+            <p
+              className={`${locale === "ur" ? "font-urdu-hero" : "font-script"} text-brand-yellow text-2xl sm:text-3xl mt-5 leading-snug`}
+            >
               {t("heroScript")}
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
@@ -150,7 +152,10 @@ export default async function HomePage({
             <h2 className="section-title text-2xl sm:text-3xl">{t("whoTitle")}</h2>
             <p className="mt-4 text-brand-muted leading-relaxed">{t("whoText")}</p>
             <Link href={`/${locale}/about`} className="btn-primary mt-6">
-              {t("whoCta")} →
+              {t("whoCta")}
+              <span aria-hidden className="ms-1 inline-block rtl:-scale-x-100">
+                →
+              </span>
             </Link>
           </article>
 
@@ -171,7 +176,9 @@ export default async function HomePage({
           <article className="rounded-2xl bg-brand-green-soft p-6 sm:p-7 ring-1 ring-brand-green/10">
             <h2 className="section-title text-2xl">{t("visionTitle")}</h2>
             <p className="mt-4 font-display text-lg text-brand-green leading-relaxed">
-              “{t("visionText")}”
+              <span aria-hidden>“</span>
+              {t("visionText")}
+              <span aria-hidden>”</span>
             </p>
           </article>
         </div>
@@ -224,7 +231,9 @@ export default async function HomePage({
             <h2 className="section-title text-2xl sm:text-3xl">
               {t("galleryTitle")}
             </h2>
-            <p className="font-script text-brand-green text-2xl sm:text-3xl max-w-xs leading-tight">
+            <p
+              className={`${locale === "ur" ? "font-urdu-hero" : "font-script"} text-brand-green text-2xl sm:text-3xl max-w-xs leading-tight`}
+            >
               {t("galleryScript")}
               <span className="block h-1 w-24 mt-2 rounded-full bg-brand-yellow" />
             </p>
@@ -239,7 +248,7 @@ export default async function HomePage({
               >
                 <Image
                   src={src}
-                  alt=""
+                  alt={`${t("galleryTitle")} ${i + 1}`}
                   fill
                   className="object-cover hover:scale-105 transition-transform duration-500"
                   sizes="(max-width: 768px) 50vw, 20vw"
@@ -296,7 +305,7 @@ export default async function HomePage({
             <p className="mt-2 text-sm text-brand-muted leading-relaxed">
               {t("help3Text")}
             </p>
-            <Link href={`/${locale}/apply`} className="btn-primary mt-6">
+            <Link href={`/${locale}/contact`} className="btn-primary mt-6">
               {t("help3Cta")}
             </Link>
           </article>
@@ -318,7 +327,10 @@ export default async function HomePage({
               href={`/${locale}/about`}
               className="btn-donate mt-6 self-start"
             >
-              {t("transparencyCta")} →
+              {t("transparencyCta")}
+              <span aria-hidden className="ms-1 inline-block rtl:-scale-x-100">
+                →
+              </span>
             </Link>
           </article>
 
@@ -376,7 +388,7 @@ export default async function HomePage({
                   <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg">
                     <Image
                       src={item.img}
-                      alt=""
+                      alt={item.title}
                       fill
                       className="object-cover"
                       sizes="56px"
@@ -408,7 +420,7 @@ export default async function HomePage({
               <Heart className="h-4 w-4 fill-current" />
               {t("ctaDonate")}
             </Link>
-            <Link href={`/${locale}/apply`} className="btn-hero-outline">
+            <Link href={`/${locale}/donate`} className="btn-hero-outline">
               {t("ctaSupport")}
             </Link>
           </div>

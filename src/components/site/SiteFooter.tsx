@@ -92,11 +92,14 @@ export async function SiteFooter() {
           <p>
             © {new Date().getFullYear()} {brand("name")}. {t("rights")}
           </p>
-          <p className="flex gap-3">
-            <span>{t("privacy")}</span>
-            <span aria-hidden>|</span>
-            <span>{t("terms")}</span>
-          </p>
+          <div className="flex flex-wrap gap-4">
+            <Link href={`/${locale}/status`} className="hover:text-white">
+              {nav("status")}
+            </Link>
+            <Link href={`/${locale}/contact`} className="hover:text-white">
+              {nav("contact")}
+            </Link>
+          </div>
         </div>
       </div>
     </footer>

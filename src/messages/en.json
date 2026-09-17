@@ -66,9 +66,9 @@
     "help2Title": "Donate",
     "help2Text": "Give through bank transfer, JazzCash, or EasyPaisa.",
     "help2Cta": "Donate Now",
-    "help3Title": "Volunteer / Apply",
-    "help3Text": "Need aid? Submit an application. Want to help? Contact the foundation.",
-    "help3Cta": "Get Involved",
+    "help3Title": "Volunteer & Contact",
+    "help3Text": "Want to volunteer or partner with us? Reach the foundation team.",
+    "help3Cta": "Contact Us",
     "transparencyTitle": "Transparency & Accountability",
     "transparencyText": "Aid decisions are board-reviewed. Approved support goes to schools so every rupee serves education.",
     "transparencyCta": "View About",
@@ -141,7 +141,8 @@
     "sectionSchool": "School & fee details",
     "checkStatus": "Check application status",
     "submitAnother": "Submit another application",
-    "submitting": "Submitting…"
+    "submitting": "Submitting…",
+    "submitFailed": "Submission failed. Please try again."
   },
   "donate": {
     "title": "Donate",
