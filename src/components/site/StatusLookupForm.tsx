@@ -1,7 +1,8 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { useMemo, useState } from "react";
+import { formatDateTimePK } from "@/lib/datetime";
 import { formatCnic, formatMobile } from "@/lib/validations";
 
 type ApplicationResult = {
@@ -42,6 +43,7 @@ function isDonationRef(referenceNo: string) {
 
 export function StatusLookupForm() {
   const t = useTranslations("status");
+  const locale = useLocale();
   const [referenceNo, setReferenceNo] = useState("");
   const [cnic, setCnic] = useState("");
   const [mobile, setMobile] = useState("");
@@ -194,7 +196,7 @@ export function StatusLookupForm() {
                 {result.decision.comments}
               </p>
               <p className="text-xs text-brand-muted mt-2">
-                {new Date(result.decision.decidedAt).toLocaleString()}
+                {formatDateTimePK(result.decision.decidedAt, locale)}
               </p>
             </div>
           ) : null}
@@ -246,7 +248,7 @@ export function StatusLookupForm() {
                 {result.decision.comments}
               </p>
               <p className="text-xs text-brand-muted mt-2">
-                {new Date(result.decision.decidedAt).toLocaleString()}
+                {formatDateTimePK(result.decision.decidedAt, locale)}
               </p>
             </div>
           ) : null}

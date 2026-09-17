@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { getSession, hasPermission } from "@/lib/auth";
-import { prisma } from "@/lib/db";
 import { DONATION_METHODS, DONATION_STATUSES } from "@/lib/constants";
+import { formatDateTimePK } from "@/lib/datetime";
+import { prisma } from "@/lib/db";
 
 function csvEscape(value: string | number | boolean | null | undefined) {
   const text = String(value ?? "");
@@ -74,7 +75,7 @@ export async function GET(request: Request) {
         donation.transactionId,
         donation.proofUrl,
         donation.notes,
-        donation.createdAt.toISOString(),
+        formatDateTimePK(donation.createdAt),
       ]
         .map(csvEscape)
         .join(","),

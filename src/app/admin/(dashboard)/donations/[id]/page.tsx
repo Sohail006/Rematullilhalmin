@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import { DonationDecisionForm } from "@/components/admin/DonationDecisionForm";
 import { PrintButton } from "@/components/admin/PrintButton";
 import { getSession, hasPermission } from "@/lib/auth";
+import { formatDateTimePK } from "@/lib/datetime";
 import { prisma } from "@/lib/db";
 
 function isImageProof(url: string) {
@@ -72,7 +73,7 @@ export default async function DonationDetailPage({
         <Field label="Transaction ID" value={donation.transactionId || "—"} />
         <Field
           label="Submitted"
-          value={donation.createdAt.toLocaleString()}
+          value={formatDateTimePK(donation.createdAt)}
         />
         <div className="sm:col-span-2">
           <p className="text-brand-muted">Notes</p>
@@ -135,7 +136,7 @@ export default async function DonationDetailPage({
               </p>
               <p className="text-brand-muted mt-1">{review.comments}</p>
               <p className="text-xs text-brand-muted mt-1">
-                {review.createdAt.toLocaleString()}
+                {formatDateTimePK(review.createdAt)}
               </p>
             </div>
           ))}

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { getSession, hasPermission } from "@/lib/auth";
+import { formatDateTimePK } from "@/lib/datetime";
 import { prisma } from "@/lib/db";
 import { DecisionForm } from "@/components/admin/DecisionForm";
 import { PrintButton } from "@/components/admin/PrintButton";
@@ -144,7 +145,7 @@ export default async function ApplicationDetailPage({
               </p>
               <p className="text-sm text-brand-muted mt-1">{decision.comments}</p>
               <p className="text-xs text-brand-muted mt-1">
-                {decision.createdAt.toLocaleString()}
+                {formatDateTimePK(decision.createdAt)}
               </p>
             </div>
           ))}

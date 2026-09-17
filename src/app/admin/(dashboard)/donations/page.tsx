@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { FileDown, Search } from "lucide-react";
 import { getSession, hasPermission } from "@/lib/auth";
 import { DONATION_METHODS, DONATION_STATUSES } from "@/lib/constants";
+import { formatDatePK } from "@/lib/datetime";
 import { prisma } from "@/lib/db";
 
 type SearchParams = {
@@ -314,7 +315,7 @@ export default async function DonationsPage({
                     <StatusBadge status={donation.status} />
                   </td>
                   <td className="px-4 py-3 text-brand-muted whitespace-nowrap">
-                    {donation.createdAt.toLocaleDateString()}
+                    {formatDatePK(donation.createdAt)}
                   </td>
                   <td className="px-4 py-3">
                     <Link

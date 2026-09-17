@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSession, hasPermission } from "@/lib/auth";
+import { formatDateTimePK } from "@/lib/datetime";
 import { prisma } from "@/lib/db";
 
 function csvEscape(value: string | number | boolean | null | undefined) {
@@ -56,7 +57,7 @@ export async function GET(request: Request) {
         app.schoolName,
         app.classGrade,
         app.feeAmount,
-        app.createdAt.toISOString(),
+        formatDateTimePK(app.createdAt),
       ]
         .map(csvEscape)
         .join(","),

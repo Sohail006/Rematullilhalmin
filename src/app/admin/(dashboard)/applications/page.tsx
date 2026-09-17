@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getSession, hasPermission } from "@/lib/auth";
+import { formatDatePK } from "@/lib/datetime";
 import { prisma } from "@/lib/db";
 
 export default async function ApplicationsPage({
@@ -97,7 +98,7 @@ export default async function ApplicationsPage({
                     <StatusBadge status={app.status} />
                   </td>
                   <td className="px-4 py-3 text-brand-muted">
-                    {app.createdAt.toLocaleDateString()}
+                    {formatDatePK(app.createdAt)}
                   </td>
                 </tr>
               ))
