@@ -68,7 +68,10 @@ export const donationNotifySchema = z.object({
     .email("Invalid email")
     .optional()
     .or(z.literal("")),
-  amount: z.coerce.number().positive("Amount must be greater than 0"),
+  amount: z.coerce
+    .number()
+    .positive("Amount must be greater than 0")
+    .max(10_000_000, "Amount cannot exceed PKR 10,000,000"),
   method: z.enum(["BANK", "JAZZCASH", "EASYPAISA"]),
   transactionId: z.string().trim().max(80).optional().or(z.literal("")),
   notes: z.string().trim().max(500).optional().or(z.literal("")),

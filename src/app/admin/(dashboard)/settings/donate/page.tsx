@@ -19,6 +19,8 @@ export default async function DonateSettingsPage() {
         </h1>
         <p className="text-brand-muted mt-1">
           Configure bank, JazzCash, and EasyPaisa shown on the public Donate page.
+          Enable a method only after account numbers are filled — otherwise the public
+          page stays empty for that method.
         </p>
       </div>
       <DonateSettingsForm initial={donate} />

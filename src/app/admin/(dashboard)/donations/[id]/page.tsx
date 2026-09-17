@@ -50,9 +50,7 @@ export default async function DonationDetailPage({
           <p className="text-brand-muted mt-1">{donation.donorName}</p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <span className="rounded px-3 py-1 text-sm font-semibold bg-brand-cream text-brand-green">
-            {donation.status}
-          </span>
+          <StatusBadge status={donation.status} />
           <PrintButton label="Print donation" />
         </div>
       </div>
@@ -68,7 +66,7 @@ export default async function DonationDetailPage({
 
       <div className="grid gap-4 sm:grid-cols-2 bg-white border border-brand-green/10 p-6 text-sm">
         <Field label="Amount" value={`PKR ${donation.amount.toLocaleString()}`} />
-        <Field label="Method" value={donation.method} />
+        <Field label="Method" value={methodLabel(donation.method)} />
         <Field label="Mobile" value={donation.mobile} />
         <Field label="Email" value={donation.email || "—"} />
         <Field label="Transaction ID" value={donation.transactionId || "—"} />
@@ -106,12 +104,24 @@ export default async function DonationDetailPage({
               </p>
             )}
           </div>
-        ) : null}
+        ) : (
+          <div className="sm:col-span-2">
+            <p className="text-brand-muted">Payment proof</p>
+            <p className="mt-1 text-brand-ink">No proof uploaded</p>
+          </div>
+        )}
       </div>
 
       {donation.status === "PENDING" && canManage ? (
         <div className="no-print">
           <DonationDecisionForm donationId={donation.id} />
+        </div>
+      ) : null}
+
+      {donation.status === "PENDING" && !canManage ? (
+        <div className="no-print rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+          This donation is awaiting confirmation. Your account can view reports
+          but does not have permission to confirm or reject them.
         </div>
       ) : null}
 
@@ -141,5 +151,27 @@ function Field({ label, value }: { label: string; value: string }) {
       <p className="text-brand-muted">{label}</p>
       <p className="mt-1 text-brand-ink font-medium">{value}</p>
     </div>
+  );
+}
+
+function methodLabel(method: string) {
+  if (method === "BANK") return "Bank transfer";
+  if (method === "JAZZCASH") return "JazzCash";
+  if (method === "EASYPAISA") return "EasyPaisa";
+  return method;
+}
+
+function StatusBadge({ status }: { status: string }) {
+  const styles: Record<string, string> = {
+    PENDING: "bg-amber-50 text-amber-800",
+    CONFIRMED: "bg-brand-green-soft text-brand-green",
+    REJECTED: "bg-red-50 text-red-700",
+  };
+  return (
+    <span
+      className={`rounded px-3 py-1 text-sm font-semibold ${styles[status] || "bg-brand-cream text-brand-green"}`}
+    >
+      {status}
+    </span>
   );
 }

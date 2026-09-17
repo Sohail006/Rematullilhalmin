@@ -1,7 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { FormEvent, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { CopyButton } from "@/components/site/CopyButton";
 import { formatMobile } from "@/lib/validations";
 
@@ -11,6 +12,7 @@ export function DonateNotifyForm({
   methods: Array<"BANK" | "JAZZCASH" | "EASYPAISA">;
 }) {
   const t = useTranslations("donate");
+  const locale = useLocale();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successRef, setSuccessRef] = useState<string | null>(null);
@@ -33,6 +35,15 @@ export function DonateNotifyForm({
 
     const form = event.currentTarget;
     const formData = new FormData(form);
+    const transactionId = String(formData.get("transactionId") || "").trim();
+    const proof = formData.get("proof");
+    const hasProof = proof instanceof File && proof.size > 0;
+
+    if (!transactionId && !hasProof) {
+      setError(t("proofOrTxnRequired"));
+      setLoading(false);
+      return;
+    }
 
     try {
       const response = await fetch("/api/donations", {
@@ -72,13 +83,21 @@ export function DonateNotifyForm({
         <p className="mt-4 text-sm text-brand-muted leading-relaxed">
           {t("notifyStatusHint")}
         </p>
-        <button
-          type="button"
-          className="btn-outline mt-6"
-          onClick={() => setSuccessRef(null)}
-        >
-          {t("notifyAnother")}
-        </button>
+        <p className="mt-2 text-sm text-brand-muted leading-relaxed">
+          {t("notifyEmailHint")}
+        </p>
+        <div className="mt-6 flex flex-wrap gap-3">
+          <Link href={`/${locale}/status`} className="btn-primary">
+            {t("checkStatusCta")}
+          </Link>
+          <button
+            type="button"
+            className="btn-outline"
+            onClick={() => setSuccessRef(null)}
+          >
+            {t("notifyAnother")}
+          </button>
+        </div>
       </div>
     );
   }
@@ -113,6 +132,7 @@ export function DonateNotifyForm({
         <div className="field">
           <label htmlFor="email">{t("donorEmail")}</label>
           <input id="email" name="email" type="email" />
+          <p className="mt-1 text-xs text-brand-muted">{t("donorEmailHint")}</p>
         </div>
         <div className="field">
           <label htmlFor="amount">{t("amount")}</label>
@@ -121,6 +141,7 @@ export function DonateNotifyForm({
             name="amount"
             type="number"
             min={1}
+            max={10000000}
             step="1"
             required
             placeholder="5000"
@@ -145,7 +166,7 @@ export function DonateNotifyForm({
         </div>
         <div className="field">
           <label htmlFor="transactionId">{t("transactionId")}</label>
-          <input id="transactionId" name="transactionId" />
+          <input id="transactionId" name="transactionId" maxLength={80} />
         </div>
       </div>
 
@@ -158,6 +179,9 @@ export function DonateNotifyForm({
           accept=".pdf,.jpg,.jpeg,.png,.webp,application/pdf,image/*"
         />
         <p className="mt-1 text-xs text-brand-muted">{t("proofHint")}</p>
+        <p className="mt-1 text-xs text-brand-green font-medium">
+          {t("proofOrTxnHint")}
+        </p>
       </div>
 
       <div className="field">

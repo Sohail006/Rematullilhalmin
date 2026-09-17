@@ -138,7 +138,7 @@ async function main() {
     }),
     donate: JSON.stringify({
       bank: {
-        enabled: true,
+        enabled: false,
         bankName: "",
         accountTitle: "Al Sirat Ul Mustaqeem Foundation",
         accountNumber: "",

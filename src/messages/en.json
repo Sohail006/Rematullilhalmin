@@ -78,7 +78,7 @@
     "linkAbout": "About the foundation",
     "linkApply": "Apply for educational aid",
     "linkDonate": "Donation details",
-    "linkStatus": "Check application status",
+    "linkStatus": "Check status",
     "linkContact": "Contact information",
     "updatesTitle": "Latest Updates",
     "update1Date": "Board review process",
@@ -90,8 +90,8 @@
     "ctaBanner": "Together, we can open the door to a better future.",
     "ctaDonate": "Donate Now",
     "ctaSupport": "Support a Child",
-    "statusHint": "Already applied? Check your application status with your reference number and CNIC.",
-    "statusCta": "Check application status"
+    "statusHint": "Already applied or donated? Check status with your reference number.",
+    "statusCta": "Check status"
   },
   "about": {
     "title": "About the foundation",
@@ -192,17 +192,22 @@
     "donorName": "Your full name",
     "donorMobile": "Mobile number",
     "donorEmail": "Email (optional)",
+    "donorEmailHint": "Add an email to receive your reference and confirmation updates.",
     "amount": "Amount donated (PKR)",
     "method": "Payment method used",
-    "transactionId": "Transaction / reference ID (optional)",
-    "proof": "Payment screenshot (optional)",
+    "transactionId": "Transaction / reference ID",
+    "proof": "Payment screenshot",
     "proofHint": "PDF, JPG, PNG, or WEBP — max 5MB",
+    "proofOrTxnHint": "Provide a transaction ID or upload proof (at least one is required).",
+    "proofOrTxnRequired": "Add a transaction ID or upload payment proof so we can verify your gift.",
     "notes": "Message for the foundation (optional)",
     "submitNotify": "Submit donation report",
     "submitting": "Submitting…",
     "notifyFailed": "Could not submit. Please try again.",
     "notifySuccess": "JazakAllah khair. Your report was received. Reference: {ref}",
     "notifyStatusHint": "Save this reference. You can check donation status anytime on the Check status page using this number and your mobile.",
+    "notifyEmailHint": "If you entered an email, a copy of this reference was also sent there.",
+    "checkStatusCta": "Check donation status",
     "notifyAnother": "Submit another report"
   },
   "contact": {
@@ -247,6 +252,11 @@
     "donationPending": "Pending confirmation",
     "donationConfirmed": "Confirmed",
     "donationRejected": "Not matched",
-    "donationConfirmedNote": "JazakAllah khair — your donation has been confirmed by the foundation."
+    "donationPendingNote": "The board is still verifying this payment. Please check again later.",
+    "donationConfirmedNote": "JazakAllah khair — your donation has been confirmed by the foundation.",
+    "donationRejectedNote": "This report could not be matched. Contact the foundation with your reference and proof if you need help.",
+    "methodBank": "Bank transfer",
+    "methodJazzcash": "JazzCash",
+    "methodEasypaisa": "EasyPaisa"
   }
 }

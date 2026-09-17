@@ -56,6 +56,7 @@ export function DonationDecisionForm({ donationId }: { donationId: string }) {
         <h2 className="font-semibold text-brand-green">Confirm donation</h2>
         <p className="text-sm text-brand-muted mt-1">
           Verify the payment in your bank or wallet statement before confirming.
+          If the donor provided an email, they will receive this decision automatically.
         </p>
       </div>
 

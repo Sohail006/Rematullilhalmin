@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { notifyAdminNewDonation } from "@/lib/email";
+import {
+  notifyAdminNewDonation,
+  notifyDonorDonationReceived,
+} from "@/lib/email";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
 import {
   generateUniqueDonationReferenceNo,
@@ -47,6 +50,20 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: message }, { status: 400 });
     }
 
+    const proof = formData.get("proof");
+    const hasProof = proof instanceof File && proof.size > 0;
+    const hasTxn = Boolean(parsed.data.transactionId);
+
+    if (!hasProof && !hasTxn) {
+      return NextResponse.json(
+        {
+          error:
+            "Add a transaction / reference ID or upload payment proof so the board can verify your gift.",
+        },
+        { status: 400 },
+      );
+    }
+
     const donate = await getDonateSettings();
     const methodAllowed =
       (parsed.data.method === "BANK" &&
@@ -69,9 +86,51 @@ export async function POST(request: Request) {
       );
     }
 
-    const proof = formData.get("proof");
+    if (hasTxn) {
+      const duplicateTxn = await prisma.donation.findFirst({
+        where: {
+          transactionId: {
+            equals: parsed.data.transactionId,
+            mode: "insensitive",
+          },
+        },
+        select: { referenceNo: true },
+      });
+      if (duplicateTxn) {
+        return NextResponse.json(
+          {
+            error: `This transaction ID was already reported (${duplicateTxn.referenceNo}).`,
+          },
+          { status: 409 },
+        );
+      }
+    }
+
+    const recentDuplicate = await prisma.donation.findFirst({
+      where: {
+        mobile: parsed.data.mobile,
+        amount: parsed.data.amount,
+        method: parsed.data.method,
+        status: "PENDING",
+        createdAt: {
+          gte: new Date(Date.now() - 48 * 60 * 60 * 1000),
+        },
+      },
+      select: { referenceNo: true },
+      orderBy: { createdAt: "desc" },
+    });
+
+    if (recentDuplicate) {
+      return NextResponse.json(
+        {
+          error: `A pending report already exists for this mobile, amount, and method (${recentDuplicate.referenceNo}). Please wait for board confirmation.`,
+        },
+        { status: 409 },
+      );
+    }
+
     let proofUrl: string | null = null;
-    if (proof instanceof File && proof.size > 0) {
+    if (hasProof && proof instanceof File) {
       proofUrl = await saveUploadedFile(proof, "donation-proof");
     }
 
@@ -98,6 +157,16 @@ export async function POST(request: Request) {
       amount: donation.amount,
       method: donation.method,
     });
+
+    if (donation.email) {
+      void notifyDonorDonationReceived({
+        email: donation.email,
+        referenceNo: donation.referenceNo,
+        donorName: donation.donorName,
+        amount: donation.amount,
+        method: donation.method,
+      });
+    }
 
     return NextResponse.json({
       ok: true,

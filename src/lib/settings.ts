@@ -43,7 +43,7 @@ export const defaultContact: ContactSettings = {
 
 export const defaultDonate: DonateSettings = {
   bank: {
-    enabled: true,
+    enabled: false,
     bankName: "",
     accountTitle: "Al Sirat Ul Mustaqeem Foundation",
     accountNumber: "",

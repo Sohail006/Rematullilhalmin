@@ -175,7 +175,14 @@ export function StatusLookupForm() {
           <div>
             <p className="text-sm text-brand-muted">{t("amount")}</p>
             <p className="text-brand-ink">
-              PKR {result.amount.toLocaleString()} · {result.method}
+              PKR {result.amount.toLocaleString()} ·{" "}
+              {result.method === "BANK"
+                ? t("methodBank")
+                : result.method === "JAZZCASH"
+                  ? t("methodJazzcash")
+                  : result.method === "EASYPAISA"
+                    ? t("methodEasypaisa")
+                    : result.method}
             </p>
           </div>
           {result.decision ? (
@@ -191,9 +198,19 @@ export function StatusLookupForm() {
               </p>
             </div>
           ) : null}
+          {result.status === "PENDING" ? (
+            <p className="text-sm text-amber-800 font-medium rounded-xl bg-amber-50 px-4 py-3">
+              {t("donationPendingNote")}
+            </p>
+          ) : null}
           {result.status === "CONFIRMED" ? (
             <p className="text-sm text-brand-green font-medium rounded-xl bg-brand-green-soft px-4 py-3">
               {t("donationConfirmedNote")}
+            </p>
+          ) : null}
+          {result.status === "REJECTED" ? (
+            <p className="text-sm text-red-700 font-medium rounded-xl bg-red-50 px-4 py-3">
+              {t("donationRejectedNote")}
             </p>
           ) : null}
         </div>
