@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { DM_Sans, Fraunces, Noto_Nastaliq_Urdu } from "next/font/google";
+import { Caveat, DM_Sans, Fraunces, Noto_Nastaliq_Urdu } from "next/font/google";
 import "./globals.css";
 
 const dmSans = DM_Sans({
@@ -10,6 +10,12 @@ const dmSans = DM_Sans({
 const fraunces = Fraunces({
   subsets: ["latin"],
   variable: "--font-fraunces",
+});
+
+const caveat = Caveat({
+  subsets: ["latin"],
+  variable: "--font-caveat",
+  weight: ["500", "600", "700"],
 });
 
 const notoNastaliq = Noto_Nastaliq_Urdu({
@@ -49,7 +55,7 @@ export default function RootLayout({
   return (
     <html suppressHydrationWarning>
       <body
-        className={`${dmSans.variable} ${fraunces.variable} ${notoNastaliq.variable} antialiased`}
+        className={`${dmSans.variable} ${fraunces.variable} ${caveat.variable} ${notoNastaliq.variable} antialiased`}
       >
         {children}
       </body>
