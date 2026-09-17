@@ -308,18 +308,64 @@ body {
 .field input,
 .field select,
 .field textarea {
-  border: 1px solid #d6d6d6;
-  border-radius: 0.5rem;
-  padding: 0.7rem 0.8rem;
+  border: 1px solid #d5ddd8;
+  border-radius: 0.75rem;
+  padding: 0.75rem 0.9rem;
   background: white;
   color: var(--brand-ink);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .field input:focus,
 .field select:focus,
 .field textarea:focus {
-  outline: 2px solid color-mix(in srgb, var(--brand-green) 35%, white);
+  outline: none;
   border-color: var(--brand-green);
+  box-shadow: 0 0 0 3px rgba(20, 74, 50, 0.12);
+}
+
+.field input[type="file"] {
+  padding: 0.65rem 0.75rem;
+  font-size: 0.9rem;
+}
+
+.surface-card {
+  border-radius: 1rem;
+  background: white;
+  box-shadow: 0 10px 30px rgba(20, 74, 50, 0.06);
+  border: 1px solid rgba(20, 74, 50, 0.08);
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.status-pill-pending {
+  background: #fff4d6;
+  color: #8a6a00;
+}
+
+.status-pill-approved {
+  background: #e7f5ec;
+  color: #144a32;
+}
+
+.status-pill-rejected {
+  background: #fde8e8;
+  color: #9b1c1c;
+}
+
+.btn-primary:disabled,
+.btn-donate:disabled,
+.btn-outline:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .admin-shell {
@@ -363,7 +409,8 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .animate-fade-up,
   .animate-float,
-  .hero-logo-badge {
+  .hero-logo-badge,
+  .hero-seal {
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;

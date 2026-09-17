@@ -15,6 +15,7 @@ const links = [
   { href: "#impact", key: "impact" as const, hash: true },
   { href: "#help", key: "help" as const, hash: true },
   { href: "/apply", key: "apply" as const },
+  { href: "/donate", key: "donate" as const },
   { href: "/contact", key: "contact" as const },
 ];
 
@@ -55,7 +56,7 @@ export function SiteHeader({
                 className="inline-flex items-center gap-1.5 hover:text-white"
               >
                 <Mail className="h-3.5 w-3.5" />
-                <span className="hidden sm:inline">{email}</span>
+                <span className="hidden md:inline">{email}</span>
               </a>
             ) : null}
             <Link
@@ -72,11 +73,11 @@ export function SiteHeader({
         <div className="container-site flex items-center justify-between gap-3 py-3">
           <Link
             href={homePath}
-            className="flex items-center gap-2.5 sm:gap-3 min-w-0 max-w-[70%] lg:max-w-[34%]"
+            className="flex items-center gap-2.5 sm:gap-3 min-w-0 max-w-[62%] lg:max-w-[30%]"
           >
             <FoundationLogo alt={brand("name")} size="header" priority />
             <div className="min-w-0">
-              <p className="font-display text-[0.72rem] sm:text-sm lg:text-[0.92rem] font-semibold text-brand-green leading-tight uppercase tracking-wide">
+              <p className="font-display text-[0.72rem] sm:text-sm lg:text-[0.9rem] font-semibold text-brand-green leading-tight uppercase tracking-wide">
                 {brand("name")}
               </p>
               <p className="text-[10px] sm:text-[11px] text-brand-muted leading-tight mt-0.5 hidden sm:block">
@@ -85,7 +86,7 @@ export function SiteHeader({
             </div>
           </Link>
 
-          <nav className="hidden xl:flex items-center gap-4 text-[0.88rem] font-medium text-brand-muted">
+          <nav className="hidden xl:flex items-center gap-3.5 text-[0.86rem] font-medium text-brand-muted">
             {links.map((link) => {
               const href = resolveHref(link);
               const active =
@@ -113,21 +114,22 @@ export function SiteHeader({
           <div className="flex items-center gap-2 shrink-0">
             <Link
               href={`/${locale}/donate`}
-              className="btn-donate hidden sm:inline-flex"
+              className="btn-donate !px-3 !py-2 sm:!px-4"
+              aria-label={t("donateNow")}
             >
               <Heart className="h-3.5 w-3.5 fill-current" />
-              {t("donateNow")}
+              <span className="hidden sm:inline">{t("donateNow")}</span>
             </Link>
             <Link
               href="/admin/login"
-              className="hidden lg:inline-flex items-center gap-1.5 rounded-md border border-brand-green/20 px-2.5 py-1.5 text-xs font-semibold text-brand-green hover:bg-brand-green-soft"
+              className="hidden lg:inline-flex items-center gap-1.5 rounded-full border border-brand-green/20 px-3 py-1.5 text-xs font-semibold text-brand-green hover:bg-brand-green-soft"
             >
               <UserRound className="h-3.5 w-3.5" />
               {t("boardLogin")}
             </Link>
             <button
               type="button"
-              className="xl:hidden rounded-md border border-brand-green/25 p-2 text-brand-green"
+              className="xl:hidden rounded-full border border-brand-green/25 p-2 text-brand-green"
               onClick={() => setOpen((v) => !v)}
               aria-label="Menu"
               aria-expanded={open}
@@ -155,14 +157,6 @@ export function SiteHeader({
               className="text-sm font-medium text-brand-muted"
             >
               {t("status")}
-            </Link>
-            <Link
-              href={`/${locale}/donate`}
-              onClick={() => setOpen(false)}
-              className="btn-donate"
-            >
-              <Heart className="h-4 w-4 fill-current" />
-              {t("donateNow")}
             </Link>
             <Link
               href="/admin/login"

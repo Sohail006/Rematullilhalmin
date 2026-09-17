@@ -25,7 +25,7 @@ export default async function StatusPage({
 
   return (
     <PageHero title={t("title")} intro={t("intro")}>
-      <div className="rounded-2xl bg-white/90 p-5 sm:p-8 ring-1 ring-brand-green/10 shadow-sm">
+      <div className="surface-card p-5 sm:p-8">
         <StatusLookupForm />
       </div>
     </PageHero>

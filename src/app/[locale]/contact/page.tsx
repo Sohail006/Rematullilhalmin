@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Clock3, Globe, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/config";
 import { getContactSettings } from "@/lib/settings";
@@ -26,7 +27,62 @@ export default async function ContactPage({
   const t = await getTranslations("contact");
   const contact = await getContactSettings();
 
-  const hasAny =
+  const items = [
+    contact.phone
+      ? {
+          icon: Phone,
+          label: t("phone"),
+          value: contact.phone,
+          href: `tel:${contact.phone}`,
+        }
+      : null,
+    contact.whatsapp
+      ? {
+          icon: MessageCircle,
+          label: t("whatsapp"),
+          value: contact.whatsapp,
+          href: `https://wa.me/${contact.whatsapp.replace(/\D/g, "")}`,
+          external: true,
+        }
+      : null,
+    contact.email
+      ? {
+          icon: Mail,
+          label: t("email"),
+          value: contact.email,
+          href: `mailto:${contact.email}`,
+        }
+      : null,
+    contact.address
+      ? {
+          icon: MapPin,
+          label: t("address"),
+          value: contact.address,
+        }
+      : null,
+    contact.officeHours
+      ? {
+          icon: Clock3,
+          label: t("officeHours"),
+          value: contact.officeHours,
+        }
+      : null,
+    {
+      icon: Globe,
+      label: t("website"),
+      value: "alsiratulmustaqeem.org.pk",
+      href: "https://www.alsiratulmustaqeem.org.pk",
+      external: true,
+    },
+  ].filter(Boolean) as Array<{
+    icon: typeof Phone;
+    label: string;
+    value: string;
+    href?: string;
+    external?: boolean;
+  }>;
+
+  const hasConfigured =
     contact.phone ||
     contact.whatsapp ||
     contact.email ||
@@ -34,73 +90,38 @@ export default async function ContactPage({
     contact.officeHours;
 
   return (
-    <PageHero title={t("title")} intro={t("intro")}>
-      {!hasAny ? (
-        <p className="text-brand-muted rounded-2xl bg-white p-6 ring-1 ring-brand-green/10">
-          {t("empty")}
-        </p>
+    <PageHero title={t("title")} intro={t("intro")} eyebrow={t("reachUs")}>
+      {!hasConfigured ? (
+        <p className="surface-card p-6 text-brand-muted">{t("empty")}</p>
       ) : (
-        <dl className="space-y-5 rounded-2xl bg-white p-6 sm:p-8 ring-1 ring-brand-green/10">
-          {contact.phone ? (
-            <div>
-              <dt className="font-semibold text-brand-ink">{t("phone")}</dt>
-              <dd>
-                <a
-                  href={`tel:${contact.phone}`}
-                  className="text-brand-green hover:underline"
-                >
-                  {contact.phone}
-                </a>
-              </dd>
-            </div>
-          ) : null}
-          {contact.whatsapp ? (
-            <div>
-              <dt className="font-semibold text-brand-ink">{t("whatsapp")}</dt>
-              <dd>
-                <a
-                  href={`https://wa.me/${contact.whatsapp.replace(/\D/g, "")}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-brand-green hover:underline"
-                >
-                  {contact.whatsapp}
-                </a>
-              </dd>
-            </div>
-          ) : null}
-          {contact.email ? (
-            <div>
-              <dt className="font-semibold text-brand-ink">{t("email")}</dt>
-              <dd>
-                <a
-                  href={`mailto:${contact.email}`}
-                  className="text-brand-green hover:underline"
-                >
-                  {contact.email}
-                </a>
-              </dd>
-            </div>
-          ) : null}
-          {contact.address ? (
-            <div>
-              <dt className="font-semibold text-brand-ink">{t("address")}</dt>
-              <dd className="text-brand-muted whitespace-pre-line">
-                {contact.address}
-              </dd>
-            </div>
-          ) : null}
-          {contact.officeHours ? (
-            <div>
-              <dt className="font-semibold text-brand-ink">{t("officeHours")}</dt>
-              <dd className="text-brand-muted">{contact.officeHours}</dd>
-            </div>
-          ) : null}
-          <div>
-            <dt className="font-semibold text-brand-ink">{t("website")}</dt>
-            <dd className="text-brand-muted">alsiratulmustaqeem.org.pk</dd>
-          </div>
-        </dl>
+        <div className="grid gap-4 sm:grid-cols-2">
+          {items.map(({ icon: Icon, label, value, href, external }) => (
+            <article key={label} className="surface-card p-5 sm:p-6">
+              <div className="flex items-start gap-4">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-green text-white">
+                  <Icon className="h-5 w-5" />
+                </span>
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold text-brand-ink">{label}</p>
+                  {href ? (
+                    <a
+                      href={href}
+                      target={external ? "_blank" : undefined}
+                      rel={external ? "noreferrer" : undefined}
+                      className="mt-1 block text-brand-green hover:underline whitespace-pre-line break-words"
+                    >
+                      {value}
+                    </a>
+                  ) : (
+                    <p className="mt-1 text-brand-muted whitespace-pre-line">
+                      {value}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
       )}
     </PageHero>
   );

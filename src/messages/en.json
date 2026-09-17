@@ -137,8 +137,11 @@
     "incomeCert": "Income certificate",
     "declaration": "I declare that the information is true. I understand aid is paid to the school if approved.",
     "requiredDocs": "Required documents",
+    "sectionApplicant": "Applicant details",
+    "sectionSchool": "School & fee details",
     "checkStatus": "Check application status",
-    "submitAnother": "Submit another application"
+    "submitAnother": "Submit another application",
+    "submitting": "Submitting…"
   },
   "donate": {
     "title": "Donate",
@@ -183,7 +186,8 @@
     "address": "Address",
     "officeHours": "Office hours",
     "empty": "Contact details will appear here once the admin configures them.",
-    "website": "Website"
+    "website": "Website",
+    "reachUs": "Ways to reach us"
   },
   "footer": {
     "rights": "All rights reserved.",
@@ -201,6 +205,7 @@
     "referenceNo": "Reference number",
     "cnic": "CNIC / B-Form number",
     "check": "Check status",
+    "checking": "Checking…",
     "error": "Could not find application",
     "student": "Student name",
     "statusLabel": "Status",

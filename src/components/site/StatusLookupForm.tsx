@@ -56,11 +56,17 @@ export function StatusLookupForm() {
     REJECTED: t("rejected"),
   };
 
+  const statusClass: Record<string, string> = {
+    PENDING: "status-pill status-pill-pending",
+    APPROVED: "status-pill status-pill-approved",
+    REJECTED: "status-pill status-pill-rejected",
+  };
+
   return (
     <div className="space-y-8">
       <form onSubmit={onSubmit} className="space-y-4 max-w-md">
         {error ? (
-          <p className="rounded border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          <p className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
             {error}
           </p>
         ) : null}
@@ -85,45 +91,48 @@ export function StatusLookupForm() {
           />
         </div>
         <button type="submit" className="btn-primary" disabled={loading}>
-          {loading ? "..." : t("check")}
+          {loading ? t("checking") : t("check")}
         </button>
       </form>
 
       {result ? (
-        <div className="rounded border border-brand-green/20 bg-brand-green-soft p-6 max-w-lg space-y-4">
-          <div>
-            <p className="text-sm text-brand-muted">{t("referenceNo")}</p>
-            <p className="font-mono font-semibold text-brand-green">
-              {result.referenceNo}
-            </p>
+        <div className="surface-card p-6 max-w-lg space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p className="text-sm text-brand-muted">{t("referenceNo")}</p>
+              <p className="font-mono font-semibold text-brand-green">
+                {result.referenceNo}
+              </p>
+            </div>
+            <span className={statusClass[result.status] || "status-pill"}>
+              {statusLabel[result.status] || result.status}
+            </span>
           </div>
           <div>
             <p className="text-sm text-brand-muted">{t("student")}</p>
-            <p className="font-medium">{result.fullName}</p>
-          </div>
-          <div>
-            <p className="text-sm text-brand-muted">{t("statusLabel")}</p>
-            <p className="font-semibold text-brand-green">
-              {statusLabel[result.status] || result.status}
-            </p>
+            <p className="font-medium text-brand-ink">{result.fullName}</p>
           </div>
           <div>
             <p className="text-sm text-brand-muted">{t("school")}</p>
-            <p>{result.schoolName}</p>
+            <p className="text-brand-ink">{result.schoolName}</p>
           </div>
           {result.decision ? (
-            <div className="border-t border-brand-green/15 pt-4">
+            <div className="border-t border-brand-green/10 pt-4">
               <p className="text-sm font-semibold text-brand-green">
                 {t("boardComments")}
               </p>
-              <p className="mt-1 text-brand-muted">{result.decision.comments}</p>
+              <p className="mt-1 text-brand-muted leading-relaxed">
+                {result.decision.comments}
+              </p>
               <p className="text-xs text-brand-muted mt-2">
                 {new Date(result.decision.decidedAt).toLocaleString()}
               </p>
             </div>
           ) : null}
           {result.status === "APPROVED" ? (
-            <p className="text-sm text-brand-green font-medium">{t("approvedNote")}</p>
+            <p className="text-sm text-brand-green font-medium rounded-xl bg-brand-green-soft px-4 py-3">
+              {t("approvedNote")}
+            </p>
           ) : null}
         </div>
       ) : null}

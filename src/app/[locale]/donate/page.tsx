@@ -57,27 +57,26 @@ export default async function DonatePage({
       : `/${locale}/contact`;
 
   return (
-    <div className="page-shell">
+    <div className="bg-[#f7f8f6]">
       <section className="container-site relative py-10 sm:py-14 lg:py-16">
         <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:gap-12">
           <div className="space-y-5">
+            <p className="text-brand-green text-xs sm:text-sm font-semibold tracking-[0.16em] uppercase">
+              {t("impact")}
+            </p>
             <h1 className="section-title text-4xl sm:text-5xl">{t("title")}</h1>
-            <div className="gold-divider justify-start">
-              <span className="text-brand-gold text-xs" aria-hidden>
-                ◆
-              </span>
-            </div>
+            <span className="block h-1 w-20 rounded-full bg-brand-yellow" />
             <p className="text-brand-muted text-lg leading-relaxed max-w-xl">
               {t("intro")}
             </p>
             <p className="text-brand-muted leading-relaxed max-w-xl">
               {t("intro2")}
             </p>
-            <div className="inline-flex items-center gap-3 rounded-full bg-white/80 px-4 py-3 ring-1 ring-brand-green/10">
-              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-green text-white">
+            <div className="inline-flex items-center gap-3 rounded-full bg-white px-4 py-3 ring-1 ring-brand-green/10 shadow-sm">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-yellow text-brand-ink">
                 <HandHeart className="h-5 w-5" />
               </span>
-              <span className="text-brand-green font-medium">{t("impact")}</span>
+              <span className="text-brand-green font-medium">{t("quote")}</span>
             </div>
           </div>
 
@@ -153,7 +152,7 @@ export default async function DonatePage({
             <p className="mt-3 text-brand-muted leading-relaxed flex-1">
               {t("monetaryText")}
             </p>
-            <a href="#donation-details" className="btn-primary mt-6 self-start">
+            <a href="#donation-details" className="btn-donate mt-6 self-start">
               {t("monetaryCta")}
               <span aria-hidden className="ms-1 inline-block rtl:-scale-x-100">
                 →
@@ -161,8 +160,8 @@ export default async function DonatePage({
             </a>
           </article>
 
-          <article className="rounded-2xl bg-[#f4ead2] p-7 sm:p-8 ring-1 ring-brand-gold/30 flex flex-col">
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-brand-gold text-brand-ink">
+          <article className="rounded-2xl bg-[#f8f0d8] p-7 sm:p-8 ring-1 ring-brand-yellow/40 flex flex-col">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-brand-yellow text-brand-ink">
               <Package className="h-7 w-7" />
             </div>
             <h3 className="mt-5 font-display text-2xl text-brand-green font-semibold">
@@ -175,7 +174,7 @@ export default async function DonatePage({
               href={inkindHref}
               target={whatsapp || contact.email ? "_blank" : undefined}
               rel={whatsapp || contact.email ? "noreferrer" : undefined}
-              className="btn-gold mt-6 self-start"
+              className="btn-primary mt-6 self-start"
             >
               {t("inkindCta")}
               <span aria-hidden className="ms-1 inline-block rtl:-scale-x-100">
@@ -193,13 +192,11 @@ export default async function DonatePage({
         ) : null}
 
         {!hasAny ? (
-          <p className="text-brand-muted rounded-xl bg-white p-6 ring-1 ring-brand-green/10">
-            {t("empty")}
-          </p>
+          <p className="text-brand-muted surface-card p-6">{t("empty")}</p>
         ) : (
           <div className="grid gap-5 md:grid-cols-3">
             {donate.bank.enabled ? (
-              <article className="rounded-2xl bg-white p-6 ring-1 ring-brand-green/10">
+              <article className="surface-card p-6">
                 <h3 className="font-display text-xl text-brand-green font-semibold">
                   {t("bank")}
                 </h3>
@@ -239,7 +236,7 @@ export default async function DonatePage({
             ) : null}
 
             {donate.jazzcash.enabled ? (
-              <article className="rounded-2xl bg-white p-6 ring-1 ring-brand-green/10">
+              <article className="surface-card p-6">
                 <h3 className="font-display text-xl text-brand-green font-semibold">
                   {t("jazzcash")}
                 </h3>
@@ -257,7 +254,7 @@ export default async function DonatePage({
             ) : null}
 
             {donate.easypaisa.enabled ? (
-              <article className="rounded-2xl bg-white p-6 ring-1 ring-brand-green/10">
+              <article className="surface-card p-6">
                 <h3 className="font-display text-xl text-brand-green font-semibold">
                   {t("easypaisa")}
                 </h3>

@@ -3,34 +3,41 @@ import type { ReactNode } from "react";
 export function PageHero({
   title,
   intro,
+  eyebrow,
   children,
+  wide,
 }: {
   title: string;
   intro?: string;
+  eyebrow?: string;
   children?: ReactNode;
+  wide?: boolean;
 }) {
   return (
-    <div className="page-shell">
-      <div className="container-site relative py-10 sm:py-14">
-        <div className="max-w-3xl">
-          <h1 className="section-title text-3xl sm:text-4xl">
+    <div className="bg-[#f7f8f6]">
+      <div className="border-b border-brand-green/10 bg-brand-green text-white">
+        <div className="container-site py-10 sm:py-12">
+          {eyebrow ? (
+            <p className="text-brand-yellow text-xs sm:text-sm font-semibold tracking-[0.16em] uppercase mb-3">
+              {eyebrow}
+            </p>
+          ) : null}
+          <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-semibold leading-tight max-w-3xl">
             {title}
           </h1>
-          <div className="gold-divider justify-start mt-4 mb-5">
-            <span className="text-brand-gold text-xs" aria-hidden>
-              ◆
-            </span>
-          </div>
+          <span className="mt-4 block h-1 w-20 rounded-full bg-brand-yellow" />
           {intro ? (
-            <p className="text-brand-muted text-lg leading-relaxed">
+            <p className="mt-5 text-white/85 text-base sm:text-lg leading-relaxed max-w-2xl">
               {intro}
             </p>
           ) : null}
         </div>
-        {children ? (
-          <div className="mt-8 max-w-4xl">{children}</div>
-        ) : null}
       </div>
+      {children ? (
+        <div className="container-site py-10 sm:py-12">
+          <div className={wide ? "max-w-5xl" : "max-w-4xl"}>{children}</div>
+        </div>
+      ) : null}
     </div>
   );
 }
