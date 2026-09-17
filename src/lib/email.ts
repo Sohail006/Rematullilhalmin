@@ -1,3 +1,7 @@
+import {
+  getSiteUrl,
+} from "@/lib/site";
+
 type SendEmailInput = {
   to: string;
   subject: string;
@@ -14,9 +18,7 @@ function escapeHtml(value: string) {
 }
 
 function siteOrigin() {
-  return (
-    process.env.NEXT_PUBLIC_SITE_URL || "https://www.alsiratulmustaqeem.org.pk"
-  ).replace(/\/$/, "");
+  return getSiteUrl();
 }
 
 function methodLabel(method: string) {

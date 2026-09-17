@@ -1,18 +1,34 @@
 import type { MetadataRoute } from "next";
+import { getSiteUrl } from "@/lib/site";
 
-const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://alsiratulmustaqeem.org.pk";
+const pages = [
+  { path: "", priority: 1, changeFrequency: "weekly" as const },
+  { path: "/about", priority: 0.9, changeFrequency: "monthly" as const },
+  { path: "/apply", priority: 0.95, changeFrequency: "weekly" as const },
+  { path: "/donate", priority: 0.95, changeFrequency: "weekly" as const },
+  { path: "/contact", priority: 0.8, changeFrequency: "monthly" as const },
+  { path: "/status", priority: 0.7, changeFrequency: "monthly" as const },
+];
+
+const locales = ["en", "ur"] as const;
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const pages = ["", "/about", "/apply", "/donate", "/contact", "/status"];
-  const locales = ["en", "ur"];
+  const siteUrl = getSiteUrl();
+  const now = new Date();
 
   return locales.flatMap((locale) =>
     pages.map((page) => ({
-      url: `${siteUrl}/${locale}${page}`,
-      lastModified: new Date(),
-      changeFrequency: page === "" ? "weekly" : "monthly",
-      priority: page === "" ? 1 : page === "/apply" ? 0.9 : 0.7,
+      url: `${siteUrl}/${locale}${page.path}`,
+      lastModified: now,
+      changeFrequency: page.changeFrequency,
+      priority: page.priority,
+      alternates: {
+        languages: {
+          en: `${siteUrl}/en${page.path}`,
+          ur: `${siteUrl}/ur${page.path}`,
+          "x-default": `${siteUrl}/en${page.path}`,
+        },
+      },
     })),
   );
 }

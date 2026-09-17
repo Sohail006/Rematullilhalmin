@@ -5,6 +5,21 @@
     "mottoUrdu": "اب پڑھے گا ہر بچہ",
     "tagline": "Education • Empowerment • A Brighter Future"
   },
+  "seo": {
+    "keywords": "Al Sirat Ul Mustaqeem Foundation, student fee aid Pakistan, education charity, school fee support, donate education Pakistan, needy students, apply for educational aid, الصراط المستقیم فاؤنڈیشن",
+    "homeTitle": "Al Sirat Ul Mustaqeem Foundation",
+    "homeDescription": "Help needy students stay in school. Al Sirat Ul Mustaqeem Foundation provides board-reviewed education aid paid directly to schools across Pakistan.",
+    "aboutTitle": "About the foundation",
+    "aboutDescription": "Learn how Al Sirat Ul Mustaqeem Foundation supports orphan and low-income students with transparent, school-directed fee assistance.",
+    "applyTitle": "Apply for educational aid",
+    "applyDescription": "Apply online for student fee support. Submit school documents and track your application with a reference number and CNIC.",
+    "donateTitle": "Donate to education",
+    "donateDescription": "Donate via bank transfer, JazzCash, or EasyPaisa. Your gift helps needy children continue education through school-paid support.",
+    "contactTitle": "Contact us",
+    "contactDescription": "Contact Al Sirat Ul Mustaqeem Foundation for education aid questions, donations, or partnership inquiries in Pakistan.",
+    "statusTitle": "Check application or donation status",
+    "statusDescription": "Check your educational aid application or donation report status using your reference number."
+  },
   "nav": {
     "home": "Home",
     "about": "About Us",

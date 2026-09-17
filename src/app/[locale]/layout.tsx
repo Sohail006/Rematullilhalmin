@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { HtmlLangDir } from "@/components/site/HtmlLangDir";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { SiteHeader } from "@/components/site/SiteHeader";
+import { SiteJsonLd } from "@/components/site/SiteJsonLd";
 import { isLocale, locales, type Locale } from "@/i18n/config";
 import { getContactSettings } from "@/lib/settings";
 
@@ -29,6 +30,7 @@ export default async function LocaleLayout({
   return (
     <NextIntlClientProvider messages={messages}>
       <HtmlLangDir locale={locale} dir={dir} />
+      <SiteJsonLd locale={locale} />
       <div lang={locale} dir={dir} className="min-h-screen flex flex-col">
         <SiteHeader locale={locale} email={contact.email || undefined} />
         <main className="flex-1">{children}</main>
