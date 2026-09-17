@@ -1,6 +1,7 @@
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
+import { HtmlLangDir } from "@/components/site/HtmlLangDir";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { isLocale, locales, type Locale } from "@/i18n/config";
@@ -27,6 +28,7 @@ export default async function LocaleLayout({
 
   return (
     <NextIntlClientProvider messages={messages}>
+      <HtmlLangDir locale={locale} dir={dir} />
       <div lang={locale} dir={dir} className="min-h-screen flex flex-col">
         <SiteHeader locale={locale} email={contact.email || undefined} />
         <main className="flex-1">{children}</main>

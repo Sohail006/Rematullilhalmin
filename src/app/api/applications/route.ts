@@ -3,7 +3,7 @@ import { prisma } from "@/lib/db";
 import { notifyAdminNewApplication } from "@/lib/email";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
 import { generateUniqueReferenceNo, isDatabaseConfigured } from "@/lib/settings";
-import { saveUploadedFile } from "@/lib/uploads";
+import { saveUploadedFile, UploadValidationError } from "@/lib/uploads";
 import { applicationFormSchema } from "@/lib/validations";
 
 export const runtime = "nodejs";
@@ -142,6 +142,9 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error(error);
+    if (error instanceof UploadValidationError) {
+      return NextResponse.json({ error: error.message }, { status: 400 });
+    }
     const message =
       error instanceof Error ? error.message : "Failed to submit application";
     return NextResponse.json({ error: message }, { status: 500 });

@@ -10,17 +10,40 @@ const ALLOWED_TYPES = new Set([
   "image/webp",
 ]);
 
+const EXT_TO_TYPE: Record<string, string> = {
+  pdf: "application/pdf",
+  jpg: "image/jpeg",
+  jpeg: "image/jpeg",
+  png: "image/png",
+  webp: "image/webp",
+};
+
 const MAX_BYTES = 5 * 1024 * 1024;
+
+export class UploadValidationError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "UploadValidationError";
+  }
+}
+
+function resolveContentType(file: File): string {
+  if (ALLOWED_TYPES.has(file.type)) return file.type;
+  const extension = file.name.split(".").pop()?.toLowerCase() || "";
+  const inferred = EXT_TO_TYPE[extension];
+  if (inferred) return inferred;
+  throw new UploadValidationError(
+    "Only PDF, JPG, PNG, or WEBP files are allowed",
+  );
+}
 
 export async function saveUploadedFile(
   file: File,
   folder: string,
 ): Promise<string> {
-  if (!ALLOWED_TYPES.has(file.type)) {
-    throw new Error("Only PDF, JPG, PNG, or WEBP files are allowed");
-  }
+  const contentType = resolveContentType(file);
   if (file.size > MAX_BYTES) {
-    throw new Error("Each file must be 5MB or smaller");
+    throw new UploadValidationError("Each file must be 5MB or smaller");
   }
 
   const extension = file.name.split(".").pop()?.toLowerCase() || "bin";
@@ -30,7 +53,7 @@ export async function saveUploadedFile(
   if (process.env.BLOB_READ_WRITE_TOKEN) {
     const blob = await put(filename, bytes, {
       access: "public",
-      contentType: file.type,
+      contentType,
     });
     return blob.url;
   }
