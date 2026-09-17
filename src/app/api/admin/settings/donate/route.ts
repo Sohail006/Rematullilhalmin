@@ -13,14 +13,28 @@ export async function PUT(request: Request) {
     const body = await request.json();
     const parsed = donateSettingsSchema.safeParse(body);
     if (!parsed.success) {
+      const fieldErrors: Record<string, string> = {};
+      for (const issue of parsed.error.issues) {
+        const key = issue.path.join(".");
+        if (key && !fieldErrors[key]) {
+          fieldErrors[key] = issue.message;
+        }
+      }
       return NextResponse.json(
-        { error: parsed.error.issues[0]?.message || "Invalid settings" },
+        {
+          error: parsed.error.issues[0]?.message || "Invalid settings",
+          fieldErrors,
+        },
         { status: 400 },
       );
     }
 
     await setSetting("donate", parsed.data);
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({
+      ok: true,
+      message: "Donate settings saved successfully",
+      settings: parsed.data,
+    });
   } catch (error) {
     console.error(error);
     return NextResponse.json({ error: "Save failed" }, { status: 500 });
