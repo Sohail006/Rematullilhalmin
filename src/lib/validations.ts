@@ -75,3 +75,81 @@ export const donationNotifySchema = z.object({
 });
 
 export type DonationNotifyInput = z.infer<typeof donationNotifySchema>;
+
+export const donateSettingsSchema = z
+  .object({
+    bank: z.object({
+      enabled: z.boolean(),
+      bankName: z.string().trim(),
+      accountTitle: z.string().trim(),
+      accountNumber: z.string().trim(),
+      iban: z.string().trim(),
+      branch: z.string().trim(),
+    }),
+    jazzcash: z.object({
+      enabled: z.boolean(),
+      accountName: z.string().trim(),
+      mobileNumber: z.string().trim(),
+    }),
+    easypaisa: z.object({
+      enabled: z.boolean(),
+      accountName: z.string().trim(),
+      mobileNumber: z.string().trim(),
+    }),
+    note: z.string().trim(),
+  })
+  .superRefine((value, ctx) => {
+    if (value.bank.enabled) {
+      if (!value.bank.accountTitle) {
+        ctx.addIssue({
+          code: "custom",
+          message: "Bank account title is required when bank transfer is enabled",
+          path: ["bank", "accountTitle"],
+        });
+      }
+      if (!value.bank.accountNumber && !value.bank.iban) {
+        ctx.addIssue({
+          code: "custom",
+          message: "Enter a bank account number or IBAN",
+          path: ["bank", "accountNumber"],
+        });
+      }
+    }
+
+    if (value.jazzcash.enabled) {
+      if (!value.jazzcash.accountName) {
+        ctx.addIssue({
+          code: "custom",
+          message: "JazzCash account name is required",
+          path: ["jazzcash", "accountName"],
+        });
+      }
+      const mobile = mobileSchema.safeParse(value.jazzcash.mobileNumber);
+      if (!mobile.success) {
+        ctx.addIssue({
+          code: "custom",
+          message: mobile.error.issues[0]?.message || "Invalid JazzCash mobile",
+          path: ["jazzcash", "mobileNumber"],
+        });
+      }
+    }
+
+    if (value.easypaisa.enabled) {
+      if (!value.easypaisa.accountName) {
+        ctx.addIssue({
+          code: "custom",
+          message: "EasyPaisa account name is required",
+          path: ["easypaisa", "accountName"],
+        });
+      }
+      const mobile = mobileSchema.safeParse(value.easypaisa.mobileNumber);
+      if (!mobile.success) {
+        ctx.addIssue({
+          code: "custom",
+          message:
+            mobile.error.issues[0]?.message || "Invalid EasyPaisa mobile",
+          path: ["easypaisa", "mobileNumber"],
+        });
+      }
+    }
+  });

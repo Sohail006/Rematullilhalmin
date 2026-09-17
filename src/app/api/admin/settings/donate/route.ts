@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getSession, hasPermission } from "@/lib/auth";
 import { setSetting } from "@/lib/settings";
-import type { DonateSettings } from "@/lib/constants";
+import { donateSettingsSchema } from "@/lib/validations";
 
 export async function PUT(request: Request) {
   try {
@@ -10,8 +10,16 @@ export async function PUT(request: Request) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    const body = (await request.json()) as DonateSettings;
-    await setSetting("donate", body);
+    const body = await request.json();
+    const parsed = donateSettingsSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: parsed.error.issues[0]?.message || "Invalid settings" },
+        { status: 400 },
+      );
+    }
+
+    await setSetting("donate", parsed.data);
     return NextResponse.json({ ok: true });
   } catch (error) {
     console.error(error);

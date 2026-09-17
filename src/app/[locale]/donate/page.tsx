@@ -221,7 +221,12 @@ export default async function DonatePage({
         ) : null}
 
         {!hasAny ? (
-          <p className="text-brand-muted surface-card p-6">{t("empty")}</p>
+          <div className="surface-card p-6 sm:p-8 space-y-4">
+            <p className="text-brand-muted leading-relaxed">{t("empty")}</p>
+            <a href={`/${locale}/contact`} className="btn-outline inline-flex">
+              {t("emptyContactCta")}
+            </a>
+          </div>
         ) : (
           <div className="grid gap-5 md:grid-cols-3">
             {showBank ? (
@@ -240,7 +245,11 @@ export default async function DonatePage({
                     <dt className="font-semibold text-brand-ink">{t("accountTitle")}</dt>
                     <dd className="flex flex-wrap items-center gap-2">
                       <span>{donate.bank.accountTitle}</span>
-                      <CopyButton value={donate.bank.accountTitle} />
+                      <CopyButton
+                        value={donate.bank.accountTitle}
+                        label={t("copy")}
+                        copiedLabel={t("copied")}
+                      />
                     </dd>
                   </div>
                   {donate.bank.accountNumber ? (
@@ -250,7 +259,11 @@ export default async function DonatePage({
                       </dt>
                       <dd className="flex flex-wrap items-center gap-2">
                         <span className="font-mono">{donate.bank.accountNumber}</span>
-                        <CopyButton value={donate.bank.accountNumber} />
+                        <CopyButton
+                          value={donate.bank.accountNumber}
+                          label={t("copy")}
+                          copiedLabel={t("copied")}
+                        />
                       </dd>
                     </div>
                   ) : null}
@@ -259,7 +272,11 @@ export default async function DonatePage({
                       <dt className="font-semibold text-brand-ink">{t("iban")}</dt>
                       <dd className="flex flex-wrap items-center gap-2">
                         <span className="font-mono break-all">{donate.bank.iban}</span>
-                        <CopyButton value={donate.bank.iban} />
+                        <CopyButton
+                          value={donate.bank.iban}
+                          label={t("copy")}
+                          copiedLabel={t("copied")}
+                        />
                       </dd>
                     </div>
                   ) : null}
@@ -287,7 +304,11 @@ export default async function DonatePage({
                     <dt className="font-semibold text-brand-ink">{t("mobileAccount")}</dt>
                     <dd className="flex flex-wrap items-center gap-2">
                       <span className="font-mono">{donate.jazzcash.mobileNumber}</span>
-                      <CopyButton value={donate.jazzcash.mobileNumber} />
+                      <CopyButton
+                        value={donate.jazzcash.mobileNumber}
+                        label={t("copy")}
+                        copiedLabel={t("copied")}
+                      />
                     </dd>
                   </div>
                 </dl>
@@ -308,7 +329,11 @@ export default async function DonatePage({
                     <dt className="font-semibold text-brand-ink">{t("mobileAccount")}</dt>
                     <dd className="flex flex-wrap items-center gap-2">
                       <span className="font-mono">{donate.easypaisa.mobileNumber}</span>
-                      <CopyButton value={donate.easypaisa.mobileNumber} />
+                      <CopyButton
+                        value={donate.easypaisa.mobileNumber}
+                        label={t("copy")}
+                        copiedLabel={t("copied")}
+                      />
                     </dd>
                   </div>
                 </dl>

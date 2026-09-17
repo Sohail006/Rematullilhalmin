@@ -4,6 +4,7 @@ import { notifyAdminNewDonation } from "@/lib/email";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
 import {
   generateUniqueDonationReferenceNo,
+  getDonateSettings,
   isDatabaseConfigured,
 } from "@/lib/settings";
 import { saveUploadedFile, UploadValidationError } from "@/lib/uploads";
@@ -44,6 +45,28 @@ export async function POST(request: Request) {
     if (!parsed.success) {
       const message = parsed.error.issues[0]?.message || "Invalid form data";
       return NextResponse.json({ error: message }, { status: 400 });
+    }
+
+    const donate = await getDonateSettings();
+    const methodAllowed =
+      (parsed.data.method === "BANK" &&
+        donate.bank.enabled &&
+        Boolean(donate.bank.accountNumber || donate.bank.iban)) ||
+      (parsed.data.method === "JAZZCASH" &&
+        donate.jazzcash.enabled &&
+        Boolean(donate.jazzcash.mobileNumber)) ||
+      (parsed.data.method === "EASYPAISA" &&
+        donate.easypaisa.enabled &&
+        Boolean(donate.easypaisa.mobileNumber));
+
+    if (!methodAllowed) {
+      return NextResponse.json(
+        {
+          error:
+            "That payment method is not available right now. Choose another method or contact the foundation.",
+        },
+        { status: 400 },
+      );
     }
 
     const proof = formData.get("proof");

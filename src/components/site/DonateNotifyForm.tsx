@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { useTranslations } from "next-intl";
+import { CopyButton } from "@/components/site/CopyButton";
 import { formatMobile } from "@/lib/validations";
 
 export function DonateNotifyForm({
@@ -15,7 +16,15 @@ export function DonateNotifyForm({
   const [successRef, setSuccessRef] = useState<string | null>(null);
   const [mobile, setMobile] = useState("");
 
-  const available = methods.length > 0 ? methods : (["BANK"] as const);
+  const available = methods.length > 0 ? methods : [];
+
+  if (available.length === 0) {
+    return (
+      <p className="rounded-xl border border-brand-gold/30 bg-brand-cream px-4 py-3 text-sm text-brand-muted">
+        {t("notifyUnavailable")}
+      </p>
+    );
+  }
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -50,8 +59,18 @@ export function DonateNotifyForm({
         <p className="text-brand-green font-medium text-lg leading-relaxed">
           {t("notifySuccess", { ref: successRef })}
         </p>
-        <p className="mt-3 font-mono text-sm font-semibold text-brand-green-deep">
-          {successRef}
+        <div className="mt-3 flex flex-wrap items-center gap-3">
+          <p className="font-mono text-sm font-semibold text-brand-green-deep">
+            {successRef}
+          </p>
+          <CopyButton
+            value={successRef}
+            label={t("copy")}
+            copiedLabel={t("copied")}
+          />
+        </div>
+        <p className="mt-4 text-sm text-brand-muted leading-relaxed">
+          {t("notifyStatusHint")}
         </p>
         <button
           type="button"
