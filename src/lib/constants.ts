@@ -1,6 +1,8 @@
 export const PERMISSION_KEYS = [
   "applications.view",
   "applications.decide",
+  "donations.view",
+  "donations.manage",
   "users.manage",
   "roles.manage",
   "settings.donate",
@@ -16,6 +18,18 @@ export const APPLICATION_STATUSES = [
 ] as const;
 
 export type ApplicationStatus = (typeof APPLICATION_STATUSES)[number];
+
+export const DONATION_STATUSES = [
+  "PENDING",
+  "CONFIRMED",
+  "REJECTED",
+] as const;
+
+export type DonationStatus = (typeof DONATION_STATUSES)[number];
+
+export const DONATION_METHODS = ["BANK", "JAZZCASH", "EASYPAISA"] as const;
+
+export type DonationMethod = (typeof DONATION_METHODS)[number];
 
 export type ContactSettings = {
   phone: string;

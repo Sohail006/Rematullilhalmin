@@ -10,9 +10,11 @@ import {
 } from "lucide-react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/config";
-import { getDonateSettings } from "@/lib/settings";
+import { CopyButton } from "@/components/site/CopyButton";
+import { DonateNotifyForm } from "@/components/site/DonateNotifyForm";
+import { getDonateSettings, getContactSettings } from "@/lib/settings";
 import { getPageMetadata } from "@/lib/metadata";
-import { getContactSettings } from "@/lib/settings";
+import type { DonationMethod } from "@/lib/constants";
 
 export const dynamic = "force-dynamic";
 
@@ -36,11 +38,19 @@ export default async function DonatePage({
   const donate = await getDonateSettings();
   const contact = await getContactSettings();
 
-  const hasAny =
-    (donate.bank.enabled &&
-      (donate.bank.accountNumber || donate.bank.iban)) ||
-    (donate.jazzcash.enabled && donate.jazzcash.mobileNumber) ||
-    (donate.easypaisa.enabled && donate.easypaisa.mobileNumber);
+  const showBank =
+    donate.bank.enabled &&
+    Boolean(donate.bank.accountNumber || donate.bank.iban);
+  const showJazz =
+    donate.jazzcash.enabled && Boolean(donate.jazzcash.mobileNumber);
+  const showEasy =
+    donate.easypaisa.enabled && Boolean(donate.easypaisa.mobileNumber);
+  const hasAny = showBank || showJazz || showEasy;
+
+  const methods: DonationMethod[] = [];
+  if (showBank) methods.push("BANK");
+  if (showJazz) methods.push("JAZZCASH");
+  if (showEasy) methods.push("EASYPAISA");
 
   const supporters = [
     { icon: UserRound, title: t("who1Title"), text: t("who1Text") },
@@ -185,8 +195,27 @@ export default async function DonatePage({
         </div>
       </section>
 
-      <section id="donation-details" className="container-site pb-16 scroll-mt-24">
-        <h2 className="section-title text-2xl mb-6">{t("detailsTitle")}</h2>
+      <section id="donation-details" className="container-site pb-12 scroll-mt-24">
+        <h2 className="section-title text-2xl mb-3">{t("detailsTitle")}</h2>
+        <p className="mb-6 text-brand-muted max-w-2xl leading-relaxed">
+          {t("stepsIntro")}
+        </p>
+        <ol className="mb-8 grid gap-3 sm:grid-cols-3">
+          {[t("step1"), t("step2"), t("step3")].map((step, index) => (
+            <li
+              key={step}
+              className="rounded-2xl bg-white p-5 ring-1 ring-brand-green/10"
+            >
+              <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-brand-yellow text-sm font-bold text-brand-ink">
+                {index + 1}
+              </span>
+              <p className="mt-3 text-sm text-brand-muted leading-relaxed">
+                {step}
+              </p>
+            </li>
+          ))}
+        </ol>
+
         {donate.note ? (
           <p className="mb-6 text-brand-green font-medium">{donate.note}</p>
         ) : null}
@@ -195,12 +224,12 @@ export default async function DonatePage({
           <p className="text-brand-muted surface-card p-6">{t("empty")}</p>
         ) : (
           <div className="grid gap-5 md:grid-cols-3">
-            {donate.bank.enabled ? (
+            {showBank ? (
               <article className="surface-card p-6">
                 <h3 className="font-display text-xl text-brand-green font-semibold">
                   {t("bank")}
                 </h3>
-                <dl className="mt-4 space-y-2 text-sm text-brand-muted">
+                <dl className="mt-4 space-y-3 text-sm text-brand-muted">
                   {donate.bank.bankName ? (
                     <div>
                       <dt className="font-semibold text-brand-ink">{t("bankName")}</dt>
@@ -209,20 +238,29 @@ export default async function DonatePage({
                   ) : null}
                   <div>
                     <dt className="font-semibold text-brand-ink">{t("accountTitle")}</dt>
-                    <dd>{donate.bank.accountTitle}</dd>
+                    <dd className="flex flex-wrap items-center gap-2">
+                      <span>{donate.bank.accountTitle}</span>
+                      <CopyButton value={donate.bank.accountTitle} />
+                    </dd>
                   </div>
                   {donate.bank.accountNumber ? (
                     <div>
                       <dt className="font-semibold text-brand-ink">
                         {t("accountNumber")}
                       </dt>
-                      <dd className="font-mono">{donate.bank.accountNumber}</dd>
+                      <dd className="flex flex-wrap items-center gap-2">
+                        <span className="font-mono">{donate.bank.accountNumber}</span>
+                        <CopyButton value={donate.bank.accountNumber} />
+                      </dd>
                     </div>
                   ) : null}
                   {donate.bank.iban ? (
                     <div>
                       <dt className="font-semibold text-brand-ink">{t("iban")}</dt>
-                      <dd className="font-mono">{donate.bank.iban}</dd>
+                      <dd className="flex flex-wrap items-center gap-2">
+                        <span className="font-mono break-all">{donate.bank.iban}</span>
+                        <CopyButton value={donate.bank.iban} />
+                      </dd>
                     </div>
                   ) : null}
                   {donate.bank.branch ? (
@@ -235,43 +273,61 @@ export default async function DonatePage({
               </article>
             ) : null}
 
-            {donate.jazzcash.enabled ? (
+            {showJazz ? (
               <article className="surface-card p-6">
                 <h3 className="font-display text-xl text-brand-green font-semibold">
                   {t("jazzcash")}
                 </h3>
-                <dl className="mt-4 space-y-2 text-sm text-brand-muted">
+                <dl className="mt-4 space-y-3 text-sm text-brand-muted">
                   <div>
                     <dt className="font-semibold text-brand-ink">{t("accountTitle")}</dt>
                     <dd>{donate.jazzcash.accountName}</dd>
                   </div>
                   <div>
                     <dt className="font-semibold text-brand-ink">{t("mobileAccount")}</dt>
-                    <dd className="font-mono">{donate.jazzcash.mobileNumber}</dd>
+                    <dd className="flex flex-wrap items-center gap-2">
+                      <span className="font-mono">{donate.jazzcash.mobileNumber}</span>
+                      <CopyButton value={donate.jazzcash.mobileNumber} />
+                    </dd>
                   </div>
                 </dl>
               </article>
             ) : null}
 
-            {donate.easypaisa.enabled ? (
+            {showEasy ? (
               <article className="surface-card p-6">
                 <h3 className="font-display text-xl text-brand-green font-semibold">
                   {t("easypaisa")}
                 </h3>
-                <dl className="mt-4 space-y-2 text-sm text-brand-muted">
+                <dl className="mt-4 space-y-3 text-sm text-brand-muted">
                   <div>
                     <dt className="font-semibold text-brand-ink">{t("accountTitle")}</dt>
                     <dd>{donate.easypaisa.accountName}</dd>
                   </div>
                   <div>
                     <dt className="font-semibold text-brand-ink">{t("mobileAccount")}</dt>
-                    <dd className="font-mono">{donate.easypaisa.mobileNumber}</dd>
+                    <dd className="flex flex-wrap items-center gap-2">
+                      <span className="font-mono">{donate.easypaisa.mobileNumber}</span>
+                      <CopyButton value={donate.easypaisa.mobileNumber} />
+                    </dd>
                   </div>
                 </dl>
               </article>
             ) : null}
           </div>
         )}
+      </section>
+
+      <section id="notify-donation" className="container-site pb-16 scroll-mt-24">
+        <div className="rounded-2xl bg-white p-6 sm:p-8 ring-1 ring-brand-green/10">
+          <h2 className="section-title text-2xl">{t("notifyTitle")}</h2>
+          <p className="mt-3 text-brand-muted max-w-2xl leading-relaxed">
+            {t("notifyIntro")}
+          </p>
+          <div className="mt-7 max-w-3xl">
+            <DonateNotifyForm methods={methods} />
+          </div>
+        </div>
       </section>
     </div>
   );

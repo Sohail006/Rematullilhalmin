@@ -6,18 +6,31 @@ export default async function AdminDashboardPage() {
   const session = await getSession();
   if (!session) return null;
 
-  const [pending, approved, rejected, total] = await Promise.all([
-    prisma.application.count({ where: { status: "PENDING" } }),
-    prisma.application.count({ where: { status: "APPROVED" } }),
-    prisma.application.count({ where: { status: "REJECTED" } }),
-    prisma.application.count(),
-  ]);
+  const [pending, approved, rejected, total, donationsPending, donationsTotal] =
+    await Promise.all([
+      prisma.application.count({ where: { status: "PENDING" } }),
+      prisma.application.count({ where: { status: "APPROVED" } }),
+      prisma.application.count({ where: { status: "REJECTED" } }),
+      prisma.application.count(),
+      prisma.donation.count({ where: { status: "PENDING" } }),
+      prisma.donation.count(),
+    ]);
 
   const cards = [
-    { label: "Pending", value: pending, color: "text-amber-700" },
+    { label: "Pending applications", value: pending, color: "text-amber-700" },
     { label: "Approved", value: approved, color: "text-brand-green" },
     { label: "Rejected", value: rejected, color: "text-red-700" },
-    { label: "Total", value: total, color: "text-brand-ink" },
+    { label: "Total applications", value: total, color: "text-brand-ink" },
+    {
+      label: "Pending donations",
+      value: donationsPending,
+      color: "text-amber-700",
+    },
+    {
+      label: "Total donations",
+      value: donationsTotal,
+      color: "text-brand-ink",
+    },
   ];
 
   return (
@@ -31,7 +44,7 @@ export default async function AdminDashboardPage() {
         </p>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {cards.map((card) => (
           <div
             key={card.label}
@@ -49,6 +62,11 @@ export default async function AdminDashboardPage() {
         {hasPermission(session, "applications.view") ? (
           <Link href="/admin/applications" className="btn-primary">
             Review applications
+          </Link>
+        ) : null}
+        {hasPermission(session, "donations.view") ? (
+          <Link href="/admin/donations" className="btn-donate">
+            Review donations
           </Link>
         ) : null}
         {hasPermission(session, "settings.contact") ? (

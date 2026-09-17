@@ -46,6 +46,7 @@ model User {
   createdAt    DateTime             @default(now())
   updatedAt    DateTime             @updatedAt
   decisions    ApplicationDecision[]
+  donationReviews DonationReview[]
 }
 
 model Application {
@@ -92,4 +93,32 @@ model SiteSetting {
   key       String   @unique
   value     String
   updatedAt DateTime @updatedAt
+}
+
+model Donation {
+  id            String           @id @default(cuid())
+  referenceNo   String           @unique
+  donorName     String
+  mobile        String
+  email         String?
+  amount        Float
+  method        String
+  transactionId String?
+  proofUrl      String?
+  notes         String?
+  status        String           @default("PENDING")
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+  reviews       DonationReview[]
+}
+
+model DonationReview {
+  id           String   @id @default(cuid())
+  donationId   String
+  reviewedById String
+  action       String
+  comments     String
+  createdAt    DateTime @default(now())
+  donation     Donation @relation(fields: [donationId], references: [id], onDelete: Cascade)
+  reviewedBy   User     @relation(fields: [reviewedById], references: [id])
 }

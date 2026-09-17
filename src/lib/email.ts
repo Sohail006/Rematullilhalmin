@@ -95,3 +95,56 @@ export async function notifyApplicantDecision(input: {
     `,
   });
 }
+
+export async function notifyAdminNewDonation(input: {
+  referenceNo: string;
+  donorName: string;
+  amount: number;
+  method: string;
+}) {
+  const to =
+    process.env.ADMIN_NOTIFY_EMAIL ||
+    (await import("@/lib/settings").then((m) => m.getContactSettings())).email;
+
+  if (!to) return;
+
+  await sendEmail({
+    to,
+    subject: `New donation report: ${input.referenceNo}`,
+    html: `
+      <p>A donor reported a payment for the foundation.</p>
+      <ul>
+        <li><strong>Reference:</strong> ${input.referenceNo}</li>
+        <li><strong>Donor:</strong> ${input.donorName}</li>
+        <li><strong>Amount:</strong> PKR ${input.amount.toLocaleString()}</li>
+        <li><strong>Method:</strong> ${input.method}</li>
+      </ul>
+      <p>Log in to the board portal to confirm the donation.</p>
+    `,
+  });
+}
+
+export async function notifyDonorDonationStatus(input: {
+  email: string;
+  referenceNo: string;
+  donorName: string;
+  action: "CONFIRMED" | "REJECTED";
+  comments: string;
+}) {
+  const confirmed = input.action === "CONFIRMED";
+  await sendEmail({
+    to: input.email,
+    subject: `Donation ${input.referenceNo} — ${confirmed ? "Confirmed" : "Update"}`,
+    html: `
+      <p>Dear ${input.donorName},</p>
+      <p>Your donation report <strong>${input.referenceNo}</strong> has been <strong>${input.action}</strong>.</p>
+      <p><strong>Board comments:</strong> ${input.comments}</p>
+      ${
+        confirmed
+          ? "<p>JazakAllah khair for supporting education through Al Sirat Ul Mustaqeem Foundation.</p>"
+          : "<p>If you have questions, please contact the foundation.</p>"
+      }
+      <p>Al Sirat Ul Mustaqeem Foundation</p>
+    `,
+  });
+}

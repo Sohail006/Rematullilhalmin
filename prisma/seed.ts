@@ -15,6 +15,16 @@ const PERMISSIONS = [
     description: "Approve or reject applications with comments",
   },
   {
+    key: "donations.view",
+    label: "View donations",
+    description: "See donor payment notifications",
+  },
+  {
+    key: "donations.manage",
+    label: "Manage donations",
+    description: "Confirm or reject reported donations",
+  },
+  {
     key: "users.manage",
     label: "Manage users",
     description: "Create and update board users",
@@ -81,7 +91,12 @@ async function main() {
     })),
   });
 
-  const reviewerKeys = new Set(["applications.view", "applications.decide"]);
+  const reviewerKeys = new Set([
+    "applications.view",
+    "applications.decide",
+    "donations.view",
+    "donations.manage",
+  ]);
   const reviewerPermissions = allPermissions.filter((p) =>
     reviewerKeys.has(p.key),
   );

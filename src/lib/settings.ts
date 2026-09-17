@@ -71,6 +71,29 @@ export async function getDonateSettings() {
   return getSetting<DonateSettings>("donate", defaultDonate);
 }
 
+export async function generateUniqueDonationReferenceNo(): Promise<string> {
+  if (!isDatabaseConfigured()) {
+    return generateDonationReferenceNo();
+  }
+
+  for (let attempt = 0; attempt < 8; attempt += 1) {
+    const referenceNo = generateDonationReferenceNo();
+    const existing = await prisma.donation.findUnique({
+      where: { referenceNo },
+      select: { id: true },
+    });
+    if (!existing) return referenceNo;
+  }
+
+  return `ASM-DON-${Date.now()}`;
+}
+
+export function generateDonationReferenceNo() {
+  const year = new Date().getFullYear();
+  const random = Math.floor(100000 + Math.random() * 900000);
+  return `ASM-DON-${year}-${random}`;
+}
+
 export function generateReferenceNo() {
   const year = new Date().getFullYear();
   const random = Math.floor(100000 + Math.random() * 900000);

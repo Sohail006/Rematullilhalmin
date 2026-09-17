@@ -18,6 +18,11 @@ const items = [
     permission: "applications.view" as const,
   },
   {
+    href: "/admin/donations",
+    label: "Donations",
+    permission: "donations.view" as const,
+  },
+  {
     href: "/admin/users",
     label: "Users",
     permission: "users.manage" as const,

@@ -59,4 +59,19 @@ export const applicationFormSchema = z.object({
   }),
 });
 
-export type ApplicationFormInput = z.infer<typeof applicationFormSchema>;
+export const donationNotifySchema = z.object({
+  donorName: z.string().trim().min(3, "Donor name is required"),
+  mobile: mobileSchema,
+  email: z
+    .string()
+    .trim()
+    .email("Invalid email")
+    .optional()
+    .or(z.literal("")),
+  amount: z.coerce.number().positive("Amount must be greater than 0"),
+  method: z.enum(["BANK", "JAZZCASH", "EASYPAISA"]),
+  transactionId: z.string().trim().max(80).optional().or(z.literal("")),
+  notes: z.string().trim().max(500).optional().or(z.literal("")),
+});
+
+export type DonationNotifyInput = z.infer<typeof donationNotifySchema>;
