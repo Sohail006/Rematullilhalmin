@@ -239,6 +239,18 @@ export function StatusLookupForm() {
             <p className="text-sm text-brand-muted">{t("school")}</p>
             <p className="text-brand-ink">{result.schoolName}</p>
           </div>
+          <div>
+            <p className="text-sm text-brand-muted">{t("fee")}</p>
+            <p className="text-brand-ink">
+              PKR {result.feeAmount.toLocaleString()}
+            </p>
+          </div>
+          <div>
+            <p className="text-sm text-brand-muted">{t("submitted")}</p>
+            <p className="text-brand-ink">
+              {formatDateTimePK(result.submittedAt, locale)}
+            </p>
+          </div>
           {result.decision ? (
             <div className="border-t border-brand-green/10 pt-4">
               <p className="text-sm font-semibold text-brand-green">
@@ -252,9 +264,19 @@ export function StatusLookupForm() {
               </p>
             </div>
           ) : null}
+          {result.status === "PENDING" ? (
+            <p className="text-sm text-amber-800 font-medium rounded-xl bg-amber-50 px-4 py-3">
+              {t("pendingNote")}
+            </p>
+          ) : null}
           {result.status === "APPROVED" ? (
             <p className="text-sm text-brand-green font-medium rounded-xl bg-brand-green-soft px-4 py-3">
               {t("approvedNote")}
+            </p>
+          ) : null}
+          {result.status === "REJECTED" ? (
+            <p className="text-sm text-red-700 font-medium rounded-xl bg-red-50 px-4 py-3">
+              {t("rejectedNote")}
             </p>
           ) : null}
         </div>

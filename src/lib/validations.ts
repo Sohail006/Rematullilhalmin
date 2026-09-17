@@ -32,32 +32,45 @@ export function formatMobile(digits: string): string {
   return digits.replace(/\D/g, "").slice(0, 11);
 }
 
-export const applicationFormSchema = z.object({
-  applicantType: z.enum(["STUDENT", "GUARDIAN"]),
-  fullName: z.string().trim().min(3, "Full name is required"),
-  guardianName: z.string().trim().min(3, "Guardian / father name is required"),
-  cnic: cnicSchema,
-  mobile: mobileSchema,
-  email: z
-    .string()
-    .trim()
-    .email("Invalid email")
-    .optional()
-    .or(z.literal("")),
-  city: z.string().trim().min(2, "City is required"),
-  address: z.string().trim().min(5, "Address is required"),
-  schoolName: z.string().trim().min(2, "School name is required"),
-  schoolAddress: z.string().trim().min(5, "School address is required"),
-  classGrade: z.string().trim().min(1, "Class / grade is required"),
-  previousMarks: z.string().trim().min(1, "Previous marks are required"),
-  feeAmount: z.coerce.number().positive("Fee amount must be greater than 0"),
-  incomeInfo: z.string().trim().min(5, "Income information is required"),
-  hasDisability: z.coerce.boolean(),
-  disabilityInfo: z.string().trim().optional(),
-  declaration: z.boolean().refine((value) => value === true, {
-    message: "You must accept the declaration",
-  }),
-});
+export const applicationFormSchema = z
+  .object({
+    applicantType: z.enum(["STUDENT", "GUARDIAN"]),
+    fullName: z.string().trim().min(3, "Full name is required"),
+    guardianName: z.string().trim().min(3, "Guardian / father name is required"),
+    cnic: cnicSchema,
+    mobile: mobileSchema,
+    email: z
+      .string()
+      .trim()
+      .email("Invalid email")
+      .optional()
+      .or(z.literal("")),
+    city: z.string().trim().min(2, "City is required"),
+    address: z.string().trim().min(5, "Address is required"),
+    schoolName: z.string().trim().min(2, "School name is required"),
+    schoolAddress: z.string().trim().min(5, "School address is required"),
+    classGrade: z.string().trim().min(1, "Class / grade is required"),
+    previousMarks: z.string().trim().min(1, "Previous marks are required"),
+    feeAmount: z.coerce
+      .number()
+      .positive("Fee amount must be greater than 0")
+      .max(5_000_000, "Fee amount cannot exceed PKR 5,000,000"),
+    incomeInfo: z.string().trim().min(5, "Income information is required"),
+    hasDisability: z.coerce.boolean(),
+    disabilityInfo: z.string().trim().optional().or(z.literal("")),
+    declaration: z.boolean().refine((value) => value === true, {
+      message: "You must accept the declaration",
+    }),
+  })
+  .superRefine((value, ctx) => {
+    if (value.hasDisability && !value.disabilityInfo?.trim()) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Please provide disability details",
+        path: ["disabilityInfo"],
+      });
+    }
+  });
 
 export const donationNotifySchema = z.object({
   donorName: z.string().trim().min(3, "Donor name is required"),

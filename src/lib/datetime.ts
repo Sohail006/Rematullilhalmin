@@ -36,3 +36,13 @@ export function formatDateTimePK(
     hour12: true,
   }).format(toDate(value));
 }
+
+/** Current calendar year in Pakistan Standard Time */
+export function currentYearPK() {
+  return Number(
+    new Intl.DateTimeFormat("en-PK", {
+      timeZone: PAKISTAN_TIMEZONE,
+      year: "numeric",
+    }).format(new Date()),
+  );
+}

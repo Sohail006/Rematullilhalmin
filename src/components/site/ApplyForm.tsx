@@ -3,7 +3,11 @@
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { FormEvent, useState } from "react";
+import { CopyButton } from "@/components/site/CopyButton";
 import { formatCnic, formatMobile } from "@/lib/validations";
+
+const FILE_ACCEPT =
+  ".pdf,.jpg,.jpeg,.png,.webp,application/pdf,image/jpeg,image/png,image/webp";
 
 export function ApplyForm() {
   const t = useTranslations("apply");
@@ -50,8 +54,21 @@ export function ApplyForm() {
         <p className="text-brand-green font-medium text-lg leading-relaxed">
           {t("success", { ref: successRef })}
         </p>
-        <p className="mt-3 font-mono text-sm font-semibold text-brand-green-deep">
-          {successRef}
+        <div className="mt-3 flex flex-wrap items-center gap-3">
+          <p className="font-mono text-sm font-semibold text-brand-green-deep">
+            {successRef}
+          </p>
+          <CopyButton
+            value={successRef}
+            label={t("copy")}
+            copiedLabel={t("copied")}
+          />
+        </div>
+        <p className="mt-4 text-sm text-brand-muted leading-relaxed">
+          {t("successHint")}
+        </p>
+        <p className="mt-2 text-sm text-brand-muted leading-relaxed">
+          {t("emailReceiptHint")}
         </p>
         <div className="mt-6 flex flex-wrap gap-3">
           <Link href={`/${locale}/status`} className="btn-donate">
@@ -129,6 +146,7 @@ export function ApplyForm() {
           <div className="field">
             <label htmlFor="email">{t("email")}</label>
             <input id="email" name="email" type="email" />
+            <p className="mt-1 text-xs text-brand-muted">{t("emailHint")}</p>
           </div>
           <div className="field">
             <label htmlFor="city">{t("city")}</label>
@@ -169,6 +187,7 @@ export function ApplyForm() {
               name="feeAmount"
               type="number"
               min={1}
+              max={5000000}
               step="1"
               required
             />
@@ -204,6 +223,7 @@ export function ApplyForm() {
         <legend className="font-display text-xl text-brand-green font-semibold mb-1">
           {t("requiredDocs")}
         </legend>
+        <p className="text-xs text-brand-muted">{t("docsHint")}</p>
         <div className="grid gap-4 sm:grid-cols-1">
           <div className="field">
             <label htmlFor="feeChallan">{t("feeChallan")}</label>
@@ -211,7 +231,7 @@ export function ApplyForm() {
               id="feeChallan"
               name="feeChallan"
               type="file"
-              accept=".pdf,image/*"
+              accept={FILE_ACCEPT}
               required
             />
           </div>
@@ -221,7 +241,7 @@ export function ApplyForm() {
               id="bForm"
               name="bForm"
               type="file"
-              accept=".pdf,image/*"
+              accept={FILE_ACCEPT}
               required
             />
           </div>
@@ -231,7 +251,7 @@ export function ApplyForm() {
               id="incomeCert"
               name="incomeCert"
               type="file"
-              accept=".pdf,image/*"
+              accept={FILE_ACCEPT}
               required
             />
           </div>

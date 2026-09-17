@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { notifyAdminNewApplication } from "@/lib/email";
+import {
+  notifyAdminNewApplication,
+  notifyApplicantApplicationReceived,
+} from "@/lib/email";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
 import { generateUniqueReferenceNo, isDatabaseConfigured } from "@/lib/settings";
 import { saveUploadedFile, UploadValidationError } from "@/lib/uploads";
@@ -54,18 +57,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: message }, { status: 400 });
     }
 
-    if (
-      parsed.data.hasDisability &&
-      !parsed.data.disabilityInfo?.trim()
-    ) {
-      return NextResponse.json(
-        { error: "Please provide disability details" },
-        { status: 400 },
-      );
-    }
-
     const existingPending = await prisma.application.findFirst({
       where: { cnic: parsed.data.cnic, status: "PENDING" },
+      select: { referenceNo: true },
     });
     if (existingPending) {
       return NextResponse.json(
@@ -135,6 +129,16 @@ export async function POST(request: Request) {
       feeAmount: application.feeAmount,
     });
 
+    if (application.email) {
+      void notifyApplicantApplicationReceived({
+        email: application.email,
+        referenceNo: application.referenceNo,
+        fullName: application.fullName,
+        schoolName: application.schoolName,
+        feeAmount: application.feeAmount,
+      });
+    }
+
     return NextResponse.json({
       ok: true,
       referenceNo: application.referenceNo,
@@ -145,8 +149,9 @@ export async function POST(request: Request) {
     if (error instanceof UploadValidationError) {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
-    const message =
-      error instanceof Error ? error.message : "Failed to submit application";
-    return NextResponse.json({ error: message }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to submit application" },
+      { status: 500 },
+    );
   }
 }

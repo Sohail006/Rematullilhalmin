@@ -28,19 +28,19 @@ export async function POST(
     }
     if (comments.length < 5) {
       return NextResponse.json(
-        { error: "Comments are required" },
+        { error: "Please add comments (at least 5 characters)" },
         { status: 400 },
       );
     }
 
     const application = await prisma.application.findUnique({ where: { id } });
     if (!application) {
-      return NextResponse.json({ error: "Not found" }, { status: 404 });
+      return NextResponse.json({ error: "Application not found" }, { status: 404 });
     }
     if (application.status !== "PENDING") {
       return NextResponse.json(
-        { error: "Application already decided" },
-        { status: 400 },
+        { error: "This application was already reviewed" },
+        { status: 409 },
       );
     }
 

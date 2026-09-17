@@ -6,32 +6,82 @@ export default async function AdminDashboardPage() {
   const session = await getSession();
   if (!session) return null;
 
+  const canViewApps = hasPermission(session, "applications.view");
+  const canViewDonations = hasPermission(session, "donations.view");
+
   const [pending, approved, rejected, total, donationsPending, donationsTotal] =
     await Promise.all([
-      prisma.application.count({ where: { status: "PENDING" } }),
-      prisma.application.count({ where: { status: "APPROVED" } }),
-      prisma.application.count({ where: { status: "REJECTED" } }),
-      prisma.application.count(),
-      prisma.donation.count({ where: { status: "PENDING" } }),
-      prisma.donation.count(),
+      canViewApps
+        ? prisma.application.count({ where: { status: "PENDING" } })
+        : Promise.resolve(0),
+      canViewApps
+        ? prisma.application.count({ where: { status: "APPROVED" } })
+        : Promise.resolve(0),
+      canViewApps
+        ? prisma.application.count({ where: { status: "REJECTED" } })
+        : Promise.resolve(0),
+      canViewApps ? prisma.application.count() : Promise.resolve(0),
+      canViewDonations
+        ? prisma.donation.count({ where: { status: "PENDING" } })
+        : Promise.resolve(0),
+      canViewDonations ? prisma.donation.count() : Promise.resolve(0),
     ]);
 
   const cards = [
-    { label: "Pending applications", value: pending, color: "text-amber-700" },
-    { label: "Approved", value: approved, color: "text-brand-green" },
-    { label: "Rejected", value: rejected, color: "text-red-700" },
-    { label: "Total applications", value: total, color: "text-brand-ink" },
-    {
-      label: "Pending donations",
-      value: donationsPending,
-      color: "text-amber-700",
-    },
-    {
-      label: "Total donations",
-      value: donationsTotal,
-      color: "text-brand-ink",
-    },
-  ];
+    canViewApps
+      ? {
+          label: "Pending applications",
+          value: pending,
+          color: "text-amber-700",
+          href: "/admin/applications?status=PENDING",
+        }
+      : null,
+    canViewApps
+      ? {
+          label: "Approved",
+          value: approved,
+          color: "text-brand-green",
+          href: "/admin/applications?status=APPROVED",
+        }
+      : null,
+    canViewApps
+      ? {
+          label: "Rejected",
+          value: rejected,
+          color: "text-red-700",
+          href: "/admin/applications?status=REJECTED",
+        }
+      : null,
+    canViewApps
+      ? {
+          label: "Total applications",
+          value: total,
+          color: "text-brand-ink",
+          href: "/admin/applications",
+        }
+      : null,
+    canViewDonations
+      ? {
+          label: "Pending donations",
+          value: donationsPending,
+          color: "text-amber-700",
+          href: "/admin/donations?status=PENDING",
+        }
+      : null,
+    canViewDonations
+      ? {
+          label: "Total donations",
+          value: donationsTotal,
+          color: "text-brand-ink",
+          href: "/admin/donations",
+        }
+      : null,
+  ].filter(Boolean) as Array<{
+    label: string;
+    value: number;
+    color: string;
+    href: string;
+  }>;
 
   return (
     <div className="space-y-8">
@@ -44,28 +94,35 @@ export default async function AdminDashboardPage() {
         </p>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        {cards.map((card) => (
-          <div
-            key={card.label}
-            className="bg-white border border-brand-green/10 p-5"
-          >
-            <p className="text-sm text-brand-muted">{card.label}</p>
-            <p className={`mt-2 text-3xl font-semibold ${card.color}`}>
-              {card.value}
-            </p>
-          </div>
-        ))}
-      </div>
+      {cards.length > 0 ? (
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          {cards.map((card) => (
+            <Link
+              key={card.label}
+              href={card.href}
+              className="bg-white border border-brand-green/10 p-5 transition-colors hover:border-brand-green/30 hover:bg-brand-green-soft/40"
+            >
+              <p className="text-sm text-brand-muted">{card.label}</p>
+              <p className={`mt-2 text-3xl font-semibold ${card.color}`}>
+                {card.value}
+              </p>
+            </Link>
+          ))}
+        </div>
+      ) : (
+        <p className="text-brand-muted text-sm">
+          No review modules are available for your role.
+        </p>
+      )}
 
       <div className="flex flex-wrap gap-3">
-        {hasPermission(session, "applications.view") ? (
-          <Link href="/admin/applications" className="btn-primary">
+        {canViewApps ? (
+          <Link href="/admin/applications?status=PENDING" className="btn-primary">
             Review applications
           </Link>
         ) : null}
-        {hasPermission(session, "donations.view") ? (
-          <Link href="/admin/donations" className="btn-donate">
+        {canViewDonations ? (
+          <Link href="/admin/donations?status=PENDING" className="btn-donate">
             Review donations
           </Link>
         ) : null}

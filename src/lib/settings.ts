@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/db";
 import type { ContactSettings, DonateSettings } from "@/lib/constants";
+import { currentYearPK } from "@/lib/datetime";
 
 export function isDatabaseConfigured(): boolean {
   const url = process.env.DATABASE_URL ?? "";
@@ -89,13 +90,13 @@ export async function generateUniqueDonationReferenceNo(): Promise<string> {
 }
 
 export function generateDonationReferenceNo() {
-  const year = new Date().getFullYear();
+  const year = currentYearPK();
   const random = Math.floor(100000 + Math.random() * 900000);
   return `ASM-DON-${year}-${random}`;
 }
 
 export function generateReferenceNo() {
-  const year = new Date().getFullYear();
+  const year = currentYearPK();
   const random = Math.floor(100000 + Math.random() * 900000);
   return `ASM-${year}-${random}`;
 }

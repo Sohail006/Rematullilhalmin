@@ -101,6 +101,7 @@ export async function notifyApplicantDecision(input: {
   comments: string;
 }) {
   const approved = input.action === "APPROVED";
+  const statusUrl = `${siteOrigin()}/en/status`;
   await sendEmail({
     to: input.email,
     subject: `Application ${input.referenceNo} — ${approved ? "Approved" : "Update"}`,
@@ -113,6 +114,35 @@ export async function notifyApplicantDecision(input: {
           ? "<p>The foundation will contact you for next steps. Approved aid is paid directly to your school.</p>"
           : "<p>If you have questions, please contact the foundation.</p>"
       }
+      <p>Check status: <a href="${statusUrl}">${statusUrl}</a></p>
+      <p>Al Sirat Ul Mustaqeem Foundation</p>
+    `,
+  });
+}
+
+export async function notifyApplicantApplicationReceived(input: {
+  email: string;
+  referenceNo: string;
+  fullName: string;
+  schoolName: string;
+  feeAmount: number;
+}) {
+  const statusUrl = `${siteOrigin()}/en/status`;
+  await sendEmail({
+    to: input.email,
+    subject: `Application received: ${input.referenceNo}`,
+    html: `
+      <p>Dear ${escapeHtml(input.fullName)},</p>
+      <p>We received your educational aid application.</p>
+      <ul>
+        <li><strong>Reference:</strong> ${escapeHtml(input.referenceNo)}</li>
+        <li><strong>School:</strong> ${escapeHtml(input.schoolName)}</li>
+        <li><strong>Fee requested:</strong> PKR ${input.feeAmount.toLocaleString()}</li>
+      </ul>
+      <p>Please save this reference number. You can check status anytime at
+        <a href="${statusUrl}">${statusUrl}</a>
+        using this reference and your CNIC / B-Form number.</p>
+      <p>If approved, aid is paid directly to the school — not as cash to families.</p>
       <p>Al Sirat Ul Mustaqeem Foundation</p>
     `,
   });

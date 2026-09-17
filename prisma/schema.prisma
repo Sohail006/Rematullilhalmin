@@ -75,6 +75,11 @@ model Application {
   createdAt       DateTime               @default(now())
   updatedAt       DateTime               @updatedAt
   decisions       ApplicationDecision[]
+
+  @@index([status])
+  @@index([cnic])
+  @@index([mobile])
+  @@index([createdAt])
 }
 
 model ApplicationDecision {
