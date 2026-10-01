@@ -128,7 +128,7 @@ export default async function ContactPage({
       <div className="mt-8 surface-card p-5 sm:p-6">
         <p className="text-sm font-semibold text-brand-ink">{t("followUs")}</p>
         <p className="mt-1 text-sm text-brand-muted">{t("followIntro")}</p>
-        <SocialLinks variant="light" showLabels className="mt-4" />
+        <SocialLinks variant="light" className="mt-4" />
       </div>
     </PageHero>
   );

@@ -31,7 +31,7 @@ export async function SiteFooter() {
               <p className="text-brand-yellow text-sm font-semibold mb-2.5">
                 {t("followUs")}
               </p>
-              <SocialLinks variant="footer" showLabels />
+              <SocialLinks variant="footer" />
             </div>
           </div>
         </div>

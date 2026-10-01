@@ -7,6 +7,7 @@ import { Heart, Mail, UserRound } from "lucide-react";
 import { useEffect, useId, useState } from "react";
 import type { Locale } from "@/i18n/config";
 import { FoundationLogo } from "@/components/site/FoundationLogo";
+import { SocialLinks } from "@/components/site/SocialLinks";
 
 const links = [
   { href: "", key: "home" as const },
@@ -75,23 +76,28 @@ export function SiteHeader({
     <header className="sticky top-0 z-50">
       <div className="bg-brand-green-deep text-white text-[11px] sm:text-xs">
         <div className="container-site flex flex-wrap items-center justify-between gap-2 py-2">
-          <p className="tracking-wide text-white/90">{top("values")}</p>
-          <div className="flex items-center gap-3 text-white/90">
-            {email ? (
-              <a
-                href={`mailto:${email}`}
-                className="inline-flex items-center gap-1.5 hover:text-white"
+          <p className="tracking-wide text-white/90 hidden sm:block">
+            {top("values")}
+          </p>
+          <div className="flex w-full sm:w-auto items-center justify-between sm:justify-end gap-3 text-white/90">
+            <SocialLinks variant="topbar" />
+            <div className="flex items-center gap-3">
+              {email ? (
+                <a
+                  href={`mailto:${email}`}
+                  className="inline-flex items-center gap-1.5 hover:text-white"
+                >
+                  <Mail className="h-3.5 w-3.5" />
+                  <span className="hidden md:inline">{email}</span>
+                </a>
+              ) : null}
+              <Link
+                href={switchedPath}
+                className="rounded px-2 py-0.5 border border-white/25 font-semibold hover:bg-white/10"
               >
-                <Mail className="h-3.5 w-3.5" />
-                <span className="hidden md:inline">{email}</span>
-              </a>
-            ) : null}
-            <Link
-              href={switchedPath}
-              className="rounded px-2 py-0.5 border border-white/25 font-semibold hover:bg-white/10"
-            >
-              {otherLocale === "ur" ? "اردو" : "EN"}
-            </Link>
+                {otherLocale === "ur" ? "اردو" : "EN"}
+              </Link>
+            </div>
           </div>
         </div>
       </div>
@@ -139,6 +145,7 @@ export function SiteHeader({
           </nav>
 
           <div className="flex items-center gap-2 shrink-0">
+            <SocialLinks variant="header" className="hidden md:flex" />
             <Link
               href={`/${locale}/donate`}
               className="btn-donate !px-3 !py-2 sm:!px-4"
@@ -205,21 +212,29 @@ export function SiteHeader({
                   </Link>
                 );
               })}
-              <div className="pt-3 mt-2 border-t border-brand-green/10 grid gap-2 sm:grid-cols-2">
-                <Link
-                  href={`/${locale}/status`}
-                  onClick={() => setOpen(false)}
-                  className="inline-flex items-center justify-center rounded-full border border-brand-green/20 bg-white px-4 py-2.5 text-sm font-semibold text-brand-green hover:bg-brand-green-soft"
-                >
-                  {t("status")}
-                </Link>
-                <Link
-                  href="/admin/login"
-                  onClick={() => setOpen(false)}
-                  className="btn-primary text-sm py-2.5 lg:hidden"
-                >
-                  {t("boardLogin")}
-                </Link>
+              <div className="pt-3 mt-2 border-t border-brand-green/10 space-y-3">
+                <div className="flex items-center justify-between gap-3 px-1">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-brand-muted">
+                    {top("followUs")}
+                  </p>
+                  <SocialLinks variant="header" />
+                </div>
+                <div className="grid gap-2 sm:grid-cols-2">
+                  <Link
+                    href={`/${locale}/status`}
+                    onClick={() => setOpen(false)}
+                    className="inline-flex items-center justify-center rounded-full border border-brand-green/20 bg-white px-4 py-2.5 text-sm font-semibold text-brand-green hover:bg-brand-green-soft"
+                  >
+                    {t("status")}
+                  </Link>
+                  <Link
+                    href="/admin/login"
+                    onClick={() => setOpen(false)}
+                    className="btn-primary text-sm py-2.5 lg:hidden"
+                  >
+                    {t("boardLogin")}
+                  </Link>
+                </div>
               </div>
             </div>
           </div>

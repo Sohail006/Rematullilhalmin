@@ -31,7 +31,8 @@ const icons = {
 };
 
 type SocialLinksProps = {
-  variant?: "footer" | "light";
+  /** topbar = sticky dark strip; header = main nav; footer/light = page sections */
+  variant?: "topbar" | "header" | "footer" | "light";
   className?: string;
   showLabels?: boolean;
 };
@@ -41,10 +42,31 @@ export function SocialLinks({
   className = "",
   showLabels = false,
 }: SocialLinksProps) {
-  const isFooter = variant === "footer";
+  const styles = {
+    topbar:
+      "inline-flex h-8 w-8 items-center justify-center rounded-full bg-brand-yellow text-brand-ink shadow-sm transition hover:brightness-105 hover:scale-105",
+    header:
+      "inline-flex h-9 w-9 items-center justify-center rounded-full border border-brand-green/20 bg-brand-green-soft text-brand-green transition hover:bg-brand-green hover:text-white hover:border-brand-green",
+    footer: showLabels
+      ? "inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-2 text-sm text-white transition hover:bg-white/20"
+      : "inline-flex h-10 w-10 items-center justify-center rounded-full bg-brand-yellow text-brand-ink transition hover:brightness-105",
+    light: showLabels
+      ? "inline-flex items-center gap-2 rounded-full border border-brand-green/15 bg-white px-3.5 py-2.5 text-sm font-medium text-brand-green transition hover:bg-brand-green-soft"
+      : "inline-flex h-11 w-11 items-center justify-center rounded-full bg-brand-green text-white shadow-sm transition hover:bg-brand-green-mid",
+  } as const;
+
+  const iconSize = {
+    topbar: "h-4 w-4",
+    header: "h-4 w-4",
+    footer: "h-4 w-4",
+    light: "h-5 w-5",
+  } as const;
 
   return (
-    <div className={`flex flex-wrap items-center gap-2.5 ${className}`}>
+    <nav
+      aria-label="Social media"
+      className={`flex flex-wrap items-center gap-2 ${className}`}
+    >
       {SOCIAL_LINKS.map((item) => {
         const Icon = icons[item.key];
         return (
@@ -55,18 +77,14 @@ export function SocialLinks({
             rel="noopener noreferrer"
             aria-label={item.label}
             title={item.label}
-            className={
-              isFooter
-                ? "inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-3 py-2 text-sm text-white/90 transition-colors hover:bg-white/15 hover:text-white"
-                : "inline-flex items-center gap-2 rounded-full border border-brand-green/15 bg-white px-3.5 py-2.5 text-sm font-medium text-brand-green transition-colors hover:bg-brand-green-soft"
-            }
+            className={styles[variant]}
           >
-            <Icon className="h-4 w-4 shrink-0" />
+            <Icon className={`${iconSize[variant]} shrink-0`} />
             {showLabels ? <span>{item.label}</span> : null}
             {!showLabels ? <span className="sr-only">{item.label}</span> : null}
           </a>
         );
       })}
-    </div>
+    </nav>
   );
 }
