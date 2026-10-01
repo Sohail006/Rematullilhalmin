@@ -5,6 +5,7 @@ import type { Locale } from "@/i18n/config";
 import { getContactSettings } from "@/lib/settings";
 import { getPageMetadata } from "@/lib/metadata";
 import { PageHero } from "@/components/site/PageHero";
+import { SocialLinks } from "@/components/site/SocialLinks";
 
 export const dynamic = "force-dynamic";
 
@@ -123,6 +124,12 @@ export default async function ContactPage({
           ))}
         </div>
       )}
+
+      <div className="mt-8 surface-card p-5 sm:p-6">
+        <p className="text-sm font-semibold text-brand-ink">{t("followUs")}</p>
+        <p className="mt-1 text-sm text-brand-muted">{t("followIntro")}</p>
+        <SocialLinks variant="light" showLabels className="mt-4" />
+      </div>
     </PageHero>
   );
 }

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 import { FoundationLogo } from "@/components/site/FoundationLogo";
+import { SocialLinks } from "@/components/site/SocialLinks";
 import { getContactSettings } from "@/lib/settings";
 
 export async function SiteFooter() {
@@ -26,6 +27,12 @@ export async function SiteFooter() {
             <p className="text-white/75 text-sm mt-4 max-w-md leading-relaxed">
               {t("blurb")}
             </p>
+            <div className="mt-5">
+              <p className="text-brand-yellow text-sm font-semibold mb-2.5">
+                {t("followUs")}
+              </p>
+              <SocialLinks variant="footer" showLabels />
+            </div>
           </div>
         </div>
 

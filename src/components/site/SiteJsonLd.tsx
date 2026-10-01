@@ -4,6 +4,7 @@ import {
   SITE_EMAIL,
   SITE_NAME,
   SITE_NAME_UR,
+  SOCIAL_LINKS,
 } from "@/lib/site";
 
 type JsonLdProps = {
@@ -35,7 +36,7 @@ export function SiteJsonLd({ locale }: JsonLdProps) {
     },
     slogan:
       locale === "ur" ? "اب پڑھے گا ہر بچہ" : "Now every child will study",
-    sameAs: [siteUrl],
+    sameAs: [siteUrl, ...SOCIAL_LINKS.map((link) => link.href)],
     contactPoint: [
       {
         "@type": "ContactPoint",

@@ -241,14 +241,17 @@
     "officeHours": "Office hours",
     "empty": "Contact details will appear here once the admin configures them.",
     "website": "Website",
-    "reachUs": "Ways to reach us"
+    "reachUs": "Ways to reach us",
+    "followUs": "Follow us",
+    "followIntro": "Stay connected with the foundation on social media."
   },
   "footer": {
     "rights": "All rights reserved.",
     "domain": "alsiratulmustaqeem.org.pk",
     "blurb": "Helping needy students continue their education through transparent, school-directed financial aid.",
     "links": "Quick links",
-    "contactTitle": "Contact"
+    "contactTitle": "Contact",
+    "followUs": "Follow us"
   },
   "status": {
     "title": "Check status",
